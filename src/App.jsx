@@ -205,37 +205,66 @@ function Reveal({ children, delay = 0, as: Comp = "div", style = {} }) {
   );
 }
 
+function hashSeed(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
+  }
+  return Math.abs(h);
+}
+
 function Placeholder({ label, ratio = "56%", tone = 1 }) {
-  const seed = encodeURIComponent(label || "ferrum");
-  const src = `https://picsum.photos/seed/${seed}/1600/1000?grayscale`;
+  const seed = hashSeed(label || "ferrum");
+  const hue1 = seed % 360;
+  const hue2 = (hue1 + 40 + (seed % 60)) % 360;
+  const angle = (seed % 8) * 45;
+  const cx = 20 + (seed % 60);
+  const cy = 20 + ((seed >> 3) % 60);
+  const r1 = 30 + (seed % 25);
+  const r2 = 20 + ((seed >> 4) % 20);
+
   return (
     <div
       style={{
         width: "100%",
         paddingTop: ratio,
         position: "relative",
-        background: "#0f0f0f",
+        background: "var(--fs-surface)",
         overflow: "hidden",
       }}
     >
-      <img
-        src={src}
-        alt={label}
-        loading="lazy"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          filter: "contrast(1.05) brightness(0.85)",
-        }}
-      />
+      <svg
+        viewBox="0 0 100 100"
+        preserveAspectRatio="xMidYMid slice"
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+      >
+        <defs>
+          <linearGradient id={`g-${seed}`} x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform={`rotate(${angle} .5 .5)`}>
+            <stop offset="0%" stopColor={`hsl(${hue1}, 12%, 8%)`} />
+            <stop offset="100%" stopColor={`hsl(${hue2}, 14%, 4%)`} />
+          </linearGradient>
+          <radialGradient id={`r1-${seed}`} cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(199,255,47,0.16)" />
+            <stop offset="100%" stopColor="rgba(199,255,47,0)" />
+          </radialGradient>
+          <radialGradient id={`r2-${seed}`} cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor={`hsla(${hue1}, 60%, 55%, 0.14)`} />
+            <stop offset="100%" stopColor={`hsla(${hue1}, 60%, 55%, 0)`} />
+          </radialGradient>
+        </defs>
+        <rect width="100" height="100" fill={`url(#g-${seed})`} />
+        <circle cx={cx} cy={cy} r={r1} fill={`url(#r1-${seed})`} />
+        <circle cx={100 - cx} cy={100 - cy} r={r2} fill={`url(#r2-${seed})`} />
+        <line x1="0" y1={cy} x2="100" y2={cy - 12} stroke="rgba(245,245,240,0.06)" strokeWidth="0.3" />
+        <line x1={cx} y1="0" x2={cx + 10} y2="100" stroke="rgba(245,245,240,0.05)" strokeWidth="0.3" />
+      </svg>
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(to top, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0) 45%)",
+          background: "linear-gradient(to top, var(--fs-bg) 0%, rgba(0,0,0,0) 55%)",
+          opacity: 0.75,
         }}
       />
       <div
@@ -327,18 +356,27 @@ function SectionLabel({ children }) {
 /* ---------- NAV ---------- */
 
 function ToggleChip({ label, active, onClick, title }) {
+  const [hover, setHover] = useState(false);
   return (
     <span
       onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       title={title}
       style={{
         cursor: "pointer",
         fontSize: 12,
-        letterSpacing: "0.02em",
-        color: active ? T.accent : T.textSec,
-        border: `1px solid ${active ? T.accent : T.border}`,
-        borderRadius: 2,
-        padding: "6px 10px",
+        fontWeight: 500,
+        letterSpacing: "0.03em",
+        color: active || hover ? T.accent : T.textSec,
+        border: `1px solid ${active || hover ? T.accent : T.border}`,
+        borderRadius: 20,
+        padding: "8px 14px",
+        minWidth: 40,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: active || hover ? "rgba(199,255,47,0.08)" : "transparent",
         transition: "all 250ms ease",
       }}
     >
@@ -561,19 +599,24 @@ function Home({ go, openProject }) {
   return (
     <>
       {/* HERO */}
-      <section style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "0 5vw 96px", position: "relative" }}>
+      <section style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "120px 5vw 96px", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>
           <Placeholder label="Ferrum Studio hero" ratio="100%" tone={0} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #0A0A0A 5%, rgba(10,10,10,0.2) 60%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, var(--fs-bg) 8%, rgba(10,10,10,0.15) 65%)" }} />
         </div>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(40px, 9vw, 150px)", fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 0.98, margin: "0 0 24px", color: T.text, maxWidth: 1100 }}>
+          <div style={{ fontSize: 13, color: T.accent, letterSpacing: "0.02em", marginBottom: 20 }}>
+            {t.brand === "استوديو فيروم" ? "دبي · استوديو إبداعي" : "Dubai · Creative Studio"}
+          </div>
+        </Reveal>
+        <Reveal delay={80}>
+          <h1 style={{ fontSize: "clamp(38px, 8.5vw, 140px)", fontWeight: 600, letterSpacing: "-0.02em", lineHeight: 1.05, margin: "0 0 32px", color: T.text, maxWidth: 1100 }}>
             {t.heroHeadline}
           </h1>
         </Reveal>
-        <Reveal delay={150}>
+        <Reveal delay={180}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
-            <p style={{ fontSize: 18, color: T.textSec, maxWidth: 420, margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 18, color: T.textSec, maxWidth: 420, margin: 0, lineHeight: 1.7 }}>
               {t.heroSub}
             </p>
             <Button variant="cta" onClick={() => go("work")}>{t.heroCta}</Button>
