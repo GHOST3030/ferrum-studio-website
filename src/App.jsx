@@ -107,30 +107,42 @@ const T = {
   accentSoft: "var(--fs-accent-soft)",
   border: "var(--fs-border)",
   radius: "var(--fs-radius)",
+  secondary: "var(--fs-secondary)",
+  highlight: "var(--fs-highlight)",
+  success: "var(--fs-success)",
+  danger: "var(--fs-danger)",
 };
 
 /* ---------- THEME + LANGUAGE ---------- */
 
 const THEME_VARS = `
   :root[data-fs-theme="light"] {
-    --fs-bg: #F6F1E9;
-    --fs-surface: #ECE3D3;
-    --fs-text: #241A1D;
-    --fs-text-sec: #7A6E62;
-    --fs-accent: #7A2039;
-    --fs-accent-soft: rgba(122,32,57,0.10);
-    --fs-border: #DFD3BE;
+    --fs-bg: #F9FAFB;
+    --fs-surface: #F3F4F6;
+    --fs-text: #111827;
+    --fs-text-sec: #6B7280;
+    --fs-accent: #DC2626;
+    --fs-accent-soft: rgba(220,38,38,0.10);
+    --fs-border: #E5E7EB;
     --fs-radius: 22px;
+    --fs-secondary: #1F2937;
+    --fs-highlight: #F59E0B;
+    --fs-success: #16A34A;
+    --fs-danger: #991B1B;
   }
   :root[data-fs-theme="dark"] {
-    --fs-bg: #1B1216;
-    --fs-surface: #261A1F;
-    --fs-text: #F4ECE2;
-    --fs-text-sec: #A99789;
-    --fs-accent: #E0A0AE;
-    --fs-accent-soft: rgba(224,160,174,0.14);
-    --fs-border: #382730;
+    --fs-bg: #111827;
+    --fs-surface: #1F2937;
+    --fs-text: #F9FAFB;
+    --fs-text-sec: #9CA3AF;
+    --fs-accent: #EF4444;
+    --fs-accent-soft: rgba(239,68,68,0.16);
+    --fs-border: #374151;
     --fs-radius: 22px;
+    --fs-secondary: #F9FAFB;
+    --fs-highlight: #F59E0B;
+    --fs-success: #22C55E;
+    --fs-danger: #F87171;
   }
 `;
 
@@ -1312,6 +1324,7 @@ function Contact() {
     return (
       <section style={{ minHeight: "80vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "160px 5vw", textAlign: "center" }}>
         <Reveal>
+          <div style={{ width: 48, height: 48, borderRadius: "50%", background: T.success, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, margin: "0 auto 20px" }}>✓</div>
           <h1 style={{ fontSize: "clamp(32px, 5vw, 56px)", color: T.text, fontWeight: 500, marginBottom: 16 }}>{t.sentTitle}</h1>
           <p style={{ color: T.textSec, fontSize: 16 }}>{t.sentBody}</p>
         </Reveal>
@@ -1333,12 +1346,12 @@ function Contact() {
               <div>
                 <div style={labelStyle}>{t.name}</div>
                 <input style={fieldStyle} value={form.name} onChange={set("name")} />
-                {errors.name && <div style={{ color: "#e08a7d", fontSize: 12, marginTop: 6 }}>{errors.name}</div>}
+                {errors.name && <div style={{ color: T.danger, fontSize: 12, marginTop: 6 }}>{errors.name}</div>}
               </div>
               <div>
                 <div style={labelStyle}>{t.email}</div>
                 <input style={fieldStyle} value={form.email} onChange={set("email")} />
-                {errors.email && <div style={{ color: "#e08a7d", fontSize: 12, marginTop: 6 }}>{errors.email}</div>}
+                {errors.email && <div style={{ color: T.danger, fontSize: 12, marginTop: 6 }}>{errors.email}</div>}
               </div>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="ferrum-form-row">
@@ -1360,7 +1373,7 @@ function Contact() {
             <div>
               <div style={labelStyle}>{t.message}</div>
               <textarea rows={4} style={{ ...fieldStyle, resize: "vertical" }} value={form.message} onChange={set("message")} />
-              {errors.message && <div style={{ color: "#e08a7d", fontSize: 12, marginTop: 6 }}>{errors.message}</div>}
+              {errors.message && <div style={{ color: T.danger, fontSize: 12, marginTop: 6 }}>{errors.message}</div>}
             </div>
             <div>
               <Button variant="cta" onClick={submit} style={{ width: "fit-content" }}>{t.send}</Button>
