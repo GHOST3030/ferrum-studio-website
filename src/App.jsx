@@ -73,21 +73,38 @@ function Reveal({ children, delay = 0, as: Comp = "div", style = {} }) {
 }
 
 function Placeholder({ label, ratio = "56%", tone = 1 }) {
-  const tones = [
-    "linear-gradient(135deg, #1c1c1c 0%, #0a0a0a 60%)",
-    "linear-gradient(135deg, #202018 0%, #0a0a0a 60%)",
-    "linear-gradient(135deg, #14181c 0%, #0a0a0a 60%)",
-  ];
+  const seed = encodeURIComponent(label || "ferrum");
+  const src = `https://picsum.photos/seed/${seed}/1600/1000?grayscale`;
   return (
     <div
       style={{
         width: "100%",
         paddingTop: ratio,
         position: "relative",
-        background: tones[tone % tones.length],
+        background: "#0f0f0f",
         overflow: "hidden",
       }}
     >
+      <img
+        src={src}
+        alt={label}
+        loading="lazy"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          filter: "contrast(1.05) brightness(0.85)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to top, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0) 45%)",
+        }}
+      />
       <div
         style={{
           position: "absolute",
@@ -97,7 +114,7 @@ function Placeholder({ label, ratio = "56%", tone = 1 }) {
           padding: 16,
           fontSize: 12,
           letterSpacing: "0.04em",
-          color: T.textSec,
+          color: T.text,
         }}
       >
         {label}
