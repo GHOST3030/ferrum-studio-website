@@ -906,54 +906,42 @@ function Home({ go, openProject }) {
 
   return (
     <>
-      {/* HERO — split editorial layout */}
+      {/* HERO — text only */}
       <section
         style={{
-          minHeight: "94vh",
-          display: "grid",
-          gridTemplateColumns: "1.15fr 0.85fr",
-          alignItems: "center",
-          padding: "112px 0 0",
+          minHeight: "70vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "140px 5vw 64px",
         }}
-        className="ferrum-hero-grid"
       >
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "48px 5vw 64px" }}>
-          <Reveal>
-            <div style={{ fontSize: 13, color: T.accent, letterSpacing: "0.02em", marginBottom: 24 }}>
-              {lang === "ar" ? "دبي · استوديو إبداعي · تأسس ٢٠١٩" : "Dubai · Creative Studio · Est. 2019"}
-            </div>
-          </Reveal>
-          <Reveal delay={80}>
-            <h1
-              style={{
-                fontFamily: displayFont,
-                fontSize: "clamp(38px, 6vw, 84px)",
-                fontWeight: lang === "ar" ? 700 : 500,
-                letterSpacing: "-0.01em",
-                lineHeight: 1.08,
-                margin: "0 0 32px",
-                color: T.text,
-                maxWidth: 620,
-              }}
-            >
-              {t.heroHeadline}
-            </h1>
-          </Reveal>
-          <Reveal delay={160}>
-            <p style={{ fontSize: 18, color: T.textSec, maxWidth: 420, margin: "0 0 40px", lineHeight: 1.7 }}>
-              {t.heroSub}
-            </p>
-            <Button variant="cta" onClick={() => go("work")}>{t.heroCta}</Button>
-          </Reveal>
-        </div>
-        <Reveal delay={100} style={{ height: "100%", display: "flex", alignItems: "center" }}>
-          <div style={{ width: "100%", height: "min(560px, 62vh)", padding: "0 5vw" }} className="ferrum-hero-image-pad">
-            <div style={{ height: "100%", position: "relative" }}>
-              <div style={{ position: "absolute", inset: 0 }}>
-                <Placeholder label="Ferrum Studio hero" caption={lang === "ar" ? "استوديو فيروم" : "Ferrum Studio"} fill tone={0} />
-              </div>
-            </div>
+        <Reveal>
+          <div style={{ fontSize: 13, color: T.accent, letterSpacing: "0.02em", marginBottom: 24 }}>
+            {lang === "ar" ? "دبي · استوديو إبداعي · تأسس ٢٠١٩" : "Dubai · Creative Studio · Est. 2019"}
           </div>
+        </Reveal>
+        <Reveal delay={80}>
+          <h1
+            style={{
+              fontFamily: displayFont,
+              fontSize: "clamp(38px, 7vw, 100px)",
+              fontWeight: lang === "ar" ? 700 : 500,
+              letterSpacing: "-0.01em",
+              lineHeight: 1.08,
+              margin: "0 0 32px",
+              color: T.text,
+              maxWidth: 780,
+            }}
+          >
+            {t.heroHeadline}
+          </h1>
+        </Reveal>
+        <Reveal delay={160}>
+          <p style={{ fontSize: 18, color: T.textSec, maxWidth: 480, margin: "0 0 40px", lineHeight: 1.7 }}>
+            {t.heroSub}
+          </p>
+          <Button variant="cta" onClick={() => go("work")}>{t.heroCta}</Button>
         </Reveal>
       </section>
 
@@ -1480,10 +1468,6 @@ export default function App() {
         input, textarea, select { direction: inherit; }
         @keyframes fs-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         [dir="rtl"] .fs-marquee-track { animation-direction: reverse; }
-        @media (max-width: 900px) {
-          .ferrum-hero-grid { grid-template-columns: 1fr !important; }
-          .ferrum-hero-grid > div:last-child { min-height: 320px !important; order: -1; }
-        }
         @media (max-width: 640px) {
           .ferrum-list-category { display: none !important; }
         }
