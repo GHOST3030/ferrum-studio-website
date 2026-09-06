@@ -804,10 +804,71 @@ function Marquee({ items }) {
   );
 }
 
+function FeaturedWork({ go, openProject, displayFont }) {
+  const { t, lang } = useThemeLang();
+  const [filter, setFilter] = useState("featured");
+  const featuredDefault = PROJECTS.slice(0, 4);
+  const featuredSpans = ["span 8", "span 4", "span 12", "span 6"];
+  const spanFor = (size) => (size === "large" ? "span 8" : size === "full" ? "span 12" : size === "medium" ? "span 6" : "span 4");
+
+  const list = filter === "featured" ? featuredDefault : filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
+  const tabs = ["featured", ...FILTERS];
+
+  return (
+    <section style={{ padding: "0 5vw 128px" }}>
+      <Reveal>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
+          <h2 style={{ fontFamily: displayFont, fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.01em" }}>{t.selectedWork}</h2>
+          <span onClick={() => go("work")} style={{ cursor: "pointer", fontSize: 14, color: T.textSec, borderBottom: `1px solid ${T.border}` }}>{t.viewAll}</span>
+        </div>
+      </Reveal>
+      <Reveal delay={60}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 40, overflowX: "auto" }}>
+          {tabs.map((f) => {
+            const label = f === "featured" ? t.selectedWork : (CATEGORY_LABELS[lang]?.[f] || f);
+            const active = filter === f;
+            return (
+              <span
+                key={f}
+                onClick={() => setFilter(f)}
+                style={{
+                  cursor: "pointer",
+                  fontSize: 13,
+                  whiteSpace: "nowrap",
+                  color: active ? T.accent : T.textSec,
+                  border: `1px solid ${active ? T.accent : T.border}`,
+                  borderRadius: 20,
+                  padding: "8px 16px",
+                  background: active ? T.accentSoft : "transparent",
+                  transition: "all 250ms ease",
+                }}
+              >
+                {label}
+              </span>
+            );
+          })}
+        </div>
+      </Reveal>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: 24 }}>
+        {list.length === 0 ? (
+          <div style={{ gridColumn: "span 12", padding: "60px 0", textAlign: "center", color: T.textSec, fontSize: 14 }}>{t.noProjects}</div>
+        ) : (
+          list.map((p, i) => {
+            const span = filter === "featured" ? featuredSpans[i] : spanFor(p.size);
+            return (
+              <Reveal key={p.id} delay={(i % 8) * 60} style={{ gridColumn: span }}>
+                <ProjectBlock project={p} span={span} onOpen={openProject} toneIdx={i} />
+              </Reveal>
+            );
+          })
+        )}
+      </div>
+    </section>
+  );
+}
+
 function Home({ go, openProject }) {
   const { t, lang } = useThemeLang();
-  const featured = PROJECTS.slice(0, 4);
-  const spans = ["span 8", "span 4", "span 12", "span 6"];
   const displayFont = lang === "ar" ? "'Markazi Text', 'Tajawal', serif" : "'Fraunces', 'Inter', serif";
 
   return (
@@ -818,7 +879,7 @@ function Home({ go, openProject }) {
           minHeight: "94vh",
           display: "grid",
           gridTemplateColumns: "1.15fr 0.85fr",
-          alignItems: "stretch",
+          alignItems: "center",
           padding: "112px 0 0",
         }}
         className="ferrum-hero-grid"
@@ -852,8 +913,8 @@ function Home({ go, openProject }) {
             <Button variant="cta" onClick={() => go("work")}>{t.heroCta}</Button>
           </Reveal>
         </div>
-        <Reveal delay={100} style={{ height: "100%" }}>
-          <div style={{ height: "100%", minHeight: 420, padding: "24px 0", paddingInlineEnd: "5vw" }} className="ferrum-hero-image-pad">
+        <Reveal delay={100} style={{ height: "100%", display: "flex", alignItems: "center" }}>
+          <div style={{ width: "100%", height: "min(560px, 62vh)", padding: "0 5vw" }} className="ferrum-hero-image-pad">
             <div style={{ height: "100%", position: "relative" }}>
               <div style={{ position: "absolute", inset: 0 }}>
                 <Placeholder label="Ferrum Studio hero" caption={lang === "ar" ? "استوديو فيروم" : "Ferrum Studio"} fill tone={0} />
@@ -871,6 +932,9 @@ function Home({ go, openProject }) {
         }
       />
 
+      {/* FEATURED WORK (with filters) */}
+      <FeaturedWork go={go} openProject={openProject} displayFont={displayFont} />
+
       {/* INTRO */}
       <section style={{ padding: "128px 5vw", display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40 }} className="ferrum-detail-grid">
         <Reveal><SectionLabel>{t.whoWeAre}</SectionLabel></Reveal>
@@ -879,23 +943,6 @@ function Home({ go, openProject }) {
             {t.introText}
           </p>
         </Reveal>
-      </section>
-
-      {/* FEATURED WORK */}
-      <section style={{ padding: "0 5vw 128px" }}>
-        <Reveal>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 40 }}>
-            <h2 style={{ fontFamily: displayFont, fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.01em" }}>{t.selectedWork}</h2>
-            <span onClick={() => go("work")} style={{ cursor: "pointer", fontSize: 14, color: T.textSec, borderBottom: `1px solid ${T.border}` }}>{t.viewAll}</span>
-          </div>
-        </Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: 24 }}>
-          {featured.map((p, i) => (
-            <Reveal key={p.id} delay={i * 80} style={{ gridColumn: spans[i] }}>
-              <ProjectBlock project={p} span={spans[i]} onOpen={openProject} toneIdx={i} />
-            </Reveal>
-          ))}
-        </div>
       </section>
 
       {/* SERVICES (compact list) */}
