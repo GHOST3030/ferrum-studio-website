@@ -900,14 +900,20 @@ function Home({ go, openProject }) {
 
   return (
     <>
+      {/* FEATURED WORK — first thing on the page */}
+      <div style={{ paddingTop: 120 }}>
+        <FeaturedWork go={go} openProject={openProject} displayFont={displayFont} />
+      </div>
+
       {/* HERO — text only */}
       <section
         style={{
-          minHeight: "70vh",
+          minHeight: "50vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: "140px 5vw 64px",
+          padding: "48px 5vw 64px",
+          borderTop: `1px solid ${T.border}`,
         }}
       >
         <Reveal>
@@ -919,7 +925,7 @@ function Home({ go, openProject }) {
           <h1
             style={{
               fontFamily: displayFont,
-              fontSize: "clamp(38px, 7vw, 100px)",
+              fontSize: "clamp(34px, 6vw, 84px)",
               fontWeight: lang === "ar" ? 700 : 500,
               letterSpacing: "-0.01em",
               lineHeight: 1.08,
@@ -946,9 +952,6 @@ function Home({ go, openProject }) {
             : ["Branding", "3D Design", "Advertising", "Graphic Design", "Motion", "Photography", "Video Production"]
         }
       />
-
-      {/* FEATURED WORK (with filters) */}
-      <FeaturedWork go={go} openProject={openProject} displayFont={displayFont} />
 
       {/* INTRO */}
       <section style={{ padding: "128px 5vw", display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40 }} className="ferrum-detail-grid">
