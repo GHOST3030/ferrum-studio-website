@@ -29,13 +29,146 @@ const FILTERS = ["All", "Branding", "3D", "Advertising", "Graphic Design", "Moti
 /* ---------- STYLE TOKENS ---------- */
 
 const T = {
-  bg: "#0A0A0A",
-  surface: "#161616",
-  text: "#F5F5F0",
-  textSec: "#8A8A8A",
-  accent: "#C7FF2F",
-  border: "#292929",
+  bg: "var(--fs-bg)",
+  surface: "var(--fs-surface)",
+  text: "var(--fs-text)",
+  textSec: "var(--fs-text-sec)",
+  accent: "var(--fs-accent)",
+  border: "var(--fs-border)",
 };
+
+/* ---------- THEME + LANGUAGE ---------- */
+
+const THEME_VARS = `
+  :root[data-fs-theme="dark"] {
+    --fs-bg: #0A0A0A;
+    --fs-surface: #161616;
+    --fs-text: #F5F5F0;
+    --fs-text-sec: #8A8A8A;
+    --fs-accent: #C7FF2F;
+    --fs-border: #292929;
+  }
+  :root[data-fs-theme="light"] {
+    --fs-bg: #F7F6F2;
+    --fs-surface: #EDEBE4;
+    --fs-text: #0A0A0A;
+    --fs-text-sec: #6B6B63;
+    --fs-accent: #6B7A00;
+    --fs-border: #D8D5CB;
+  }
+`;
+
+const DICT = {
+  en: {
+    brand: "Ferrum Studio",
+    navWork: "Work",
+    navServices: "Services",
+    navAbout: "About",
+    navContact: "Contact",
+    startProject: "Start a project",
+    heroHeadline: "We build things worth looking at twice.",
+    heroSub: "A creative studio working across branding, 3D, advertising and film for clients who don't want to look like anyone else.",
+    heroCta: "See the Work",
+    whoWeAre: "Who we are",
+    introText: "Ferrum Studio is a small team of designers, 3D artists and directors based in Dubai, working with brands, founders and institutions across the region who need their work to hold up in a crowded room.",
+    selectedWork: "Selected Work",
+    viewAll: "View all projects",
+    whatWeDo: "What we do",
+    statement: "Good work looks effortless. It rarely is. We spend the effort so it doesn't show.",
+    selectedClients: "Selected Clients",
+    getInTouch: "Get in touch",
+    haveProject: "Have a project in mind?",
+    letsWork: "Let's Work Together",
+    sitemap: "Sitemap",
+    contact: "Contact",
+    social: "Social",
+    footerTagline: "A creative studio for brands that want to look like nobody else.",
+    rights: "All rights reserved.",
+    workTitle: "Work",
+    noProjects: "No projects found — try another filter.",
+    nextProject: "Next Project",
+    overview: "Overview",
+    concept: "Creative Concept",
+    outcome: "Outcome",
+    servicesTitle: "Services",
+    servicesSub: "Seven capabilities, one studio. We move between them depending on what the brief actually needs.",
+    aboutHeadline: "We build visual worlds for people with something specific to say.",
+    ourStory: "Our story",
+    aboutStoryText: "Ferrum Studio started in 2019 as a two-person 3D shop working nights on architectural renders. Six years on, we're a full creative studio — but the standard hasn't moved: every project has to earn its place in the portfolio, ours or the client's.",
+    letsTalk: "Let's talk.",
+    name: "Name",
+    email: "Email",
+    phone: "Phone",
+    company: "Company",
+    projectType: "Project type",
+    message: "Message",
+    send: "Send Message",
+    sentTitle: "Message sent.",
+    sentBody: "We read every message ourselves — expect a reply within two business days.",
+    location: "Location",
+    whatsapp: "WhatsApp",
+    errName: "Enter your name.",
+    errEmail: "Enter a valid email.",
+    errMessage: "Tell us a little about the project.",
+  },
+  ar: {
+    brand: "استوديو فيروم",
+    navWork: "الأعمال",
+    navServices: "الخدمات",
+    navAbout: "من نحن",
+    navContact: "تواصل معنا",
+    startProject: "ابدأ مشروعك",
+    heroHeadline: "نصنع أعمالاً تستحق أن تنظر إليها مرتين.",
+    heroSub: "استوديو إبداعي يعمل في الهوية البصرية، التصميم ثلاثي الأبعاد، الإعلان والأفلام لعملاء لا يريدون أن يشبهوا أحداً.",
+    heroCta: "شاهد الأعمال",
+    whoWeAre: "من نحن",
+    introText: "استوديو فيروم فريق صغير من المصممين وفناني ثلاثي الأبعاد والمخرجين مقره دبي، يعمل مع علامات تجارية ومؤسسين ومؤسسات في المنطقة يحتاجون أعمالهم لتبرز في زحمة المنافسة.",
+    selectedWork: "أعمال مختارة",
+    viewAll: "عرض كل المشاريع",
+    whatWeDo: "ماذا نقدم",
+    statement: "العمل الجيد يبدو بلا مجهود. نادراً ما يكون كذلك. نحن نبذل الجهد كي لا يظهر.",
+    selectedClients: "عملاء مختارون",
+    getInTouch: "تواصل معنا",
+    haveProject: "لديك مشروع في بالك؟",
+    letsWork: "لنعمل معاً",
+    sitemap: "خريطة الموقع",
+    contact: "تواصل",
+    social: "تابعنا",
+    footerTagline: "استوديو إبداعي للعلامات التجارية التي تريد أن تكون مختلفة عن الجميع.",
+    rights: "جميع الحقوق محفوظة.",
+    workTitle: "الأعمال",
+    noProjects: "لا توجد مشاريع — جرّب تصفية أخرى.",
+    nextProject: "المشروع التالي",
+    overview: "نظرة عامة",
+    concept: "الفكرة الإبداعية",
+    outcome: "النتيجة",
+    servicesTitle: "الخدمات",
+    servicesSub: "سبع قدرات، استوديو واحد. ننتقل بينها حسب ما يحتاجه المشروع فعلاً.",
+    aboutHeadline: "نصنع عوالم بصرية لأصحاب رسالة واضحة يريدون قولها.",
+    ourStory: "قصتنا",
+    aboutStoryText: "بدأ استوديو فيروم عام 2019 كورشة عمل ثلاثية الأبعاد من شخصين يعملان ليلاً على تصاميم معمارية. بعد ست سنوات، أصبحنا استوديو إبداعياً متكاملاً — لكن المعيار لم يتغير: كل مشروع يجب أن يستحق مكانه في المعرض، سواء كان مشروعنا أو مشروع العميل.",
+    letsTalk: "لنتحدث.",
+    name: "الاسم",
+    email: "البريد الإلكتروني",
+    phone: "الهاتف",
+    company: "الشركة",
+    projectType: "نوع المشروع",
+    message: "الرسالة",
+    send: "إرسال الرسالة",
+    sentTitle: "تم إرسال الرسالة.",
+    sentBody: "نقرأ كل رسالة بأنفسنا — توقع رداً خلال يومي عمل.",
+    location: "الموقع",
+    whatsapp: "واتساب",
+    errName: "الرجاء إدخال اسمك.",
+    errEmail: "الرجاء إدخال بريد إلكتروني صحيح.",
+    errMessage: "أخبرنا قليلاً عن مشروعك.",
+  },
+};
+
+const ThemeLangContext = React.createContext({ theme: "dark", lang: "en", t: DICT.en, toggleTheme: () => {}, toggleLang: () => {} });
+function useThemeLang() {
+  return React.useContext(ThemeLangContext);
+}
 
 /* ---------- SHARED PRIMITIVES ---------- */
 
@@ -193,7 +326,29 @@ function SectionLabel({ children }) {
 
 /* ---------- NAV ---------- */
 
+function ToggleChip({ label, active, onClick, title }) {
+  return (
+    <span
+      onClick={onClick}
+      title={title}
+      style={{
+        cursor: "pointer",
+        fontSize: 12,
+        letterSpacing: "0.02em",
+        color: active ? T.accent : T.textSec,
+        border: `1px solid ${active ? T.accent : T.border}`,
+        borderRadius: 2,
+        padding: "6px 10px",
+        transition: "all 250ms ease",
+      }}
+    >
+      {label}
+    </span>
+  );
+}
+
 function Nav({ page, go }) {
+  const { theme, lang, t, toggleTheme, toggleLang } = useThemeLang();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
@@ -203,9 +358,9 @@ function Nav({ page, go }) {
   }, []);
 
   const links = [
-    ["Work", "work"],
-    ["Services", "services"],
-    ["About", "about"],
+    [t.navWork, "work"],
+    [t.navServices, "services"],
+    [t.navAbout, "about"],
   ];
 
   return (
@@ -221,7 +376,8 @@ function Nav({ page, go }) {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "22px 5vw",
-          background: scrolled ? "rgba(10,10,10,0.9)" : "transparent",
+          background: scrolled ? "var(--fs-bg)" : "transparent",
+          opacity: scrolled ? 0.97 : 1,
           borderBottom: scrolled ? `1px solid ${T.border}` : "1px solid transparent",
           backdropFilter: scrolled ? "blur(8px)" : "none",
           transition: "background 300ms ease, border-color 300ms ease",
@@ -231,23 +387,38 @@ function Nav({ page, go }) {
           onClick={() => go("home")}
           style={{ cursor: "pointer", fontSize: 18, fontWeight: 600, letterSpacing: "-0.01em", color: T.text }}
         >
-          Ferrum&nbsp;Studio
+          {t.brand}
         </span>
-        <div style={{ display: "flex", alignItems: "center", gap: 40 }} className="ferrum-desktop-nav">
+        <div style={{ display: "flex", alignItems: "center", gap: 32 }} className="ferrum-desktop-nav">
           {links.map(([label, key]) => (
             <NavLink key={key} label={label} active={page === key} onClick={() => go(key)} />
           ))}
+          <div style={{ display: "flex", gap: 8 }}>
+            <ToggleChip
+              label={lang === "en" ? "AR" : "EN"}
+              onClick={toggleLang}
+              title="Switch language / تبديل اللغة"
+            />
+            <ToggleChip
+              label={theme === "dark" ? "☾" : "☀"}
+              onClick={toggleTheme}
+              title="Switch theme"
+            />
+          </div>
           <Button onClick={() => go("contact")} style={{ padding: "10px 20px" }}>
-            Start a project
+            {t.startProject}
           </Button>
         </div>
-        <span
-          className="ferrum-mobile-toggle"
-          onClick={() => setMenuOpen((v) => !v)}
-          style={{ display: "none", cursor: "pointer", color: T.text, fontSize: 14 }}
-        >
-          {menuOpen ? "Close" : "Menu"}
-        </span>
+        <div className="ferrum-mobile-toggle" style={{ display: "none", alignItems: "center", gap: 12 }}>
+          <ToggleChip label={lang === "en" ? "AR" : "EN"} onClick={toggleLang} />
+          <ToggleChip label={theme === "dark" ? "☾" : "☀"} onClick={toggleTheme} />
+          <span
+            onClick={() => setMenuOpen((v) => !v)}
+            style={{ cursor: "pointer", color: T.text, fontSize: 14 }}
+          >
+            {menuOpen ? "✕" : "☰"}
+          </span>
+        </div>
       </div>
 
       {menuOpen && (
@@ -264,7 +435,7 @@ function Nav({ page, go }) {
             padding: "0 8vw",
           }}
         >
-          {[...links, ["Contact", "contact"]].map(([label, key]) => (
+          {[...links, [t.navContact, "contact"]].map(([label, key]) => (
             <span
               key={key}
               onClick={() => { go(key); setMenuOpen(false); }}
@@ -284,7 +455,7 @@ function Nav({ page, go }) {
       <style>{`
         @media (max-width: 860px) {
           .ferrum-desktop-nav { display: none !important; }
-          .ferrum-mobile-toggle { display: block !important; }
+          .ferrum-mobile-toggle { display: flex !important; }
         }
       `}</style>
     </>
@@ -294,50 +465,59 @@ function Nav({ page, go }) {
 /* ---------- FOOTER + CTA (shared across pages) ---------- */
 
 function ClosingCTA({ go }) {
+  const { t } = useThemeLang();
   return (
     <section style={{ padding: "160px 5vw", textAlign: "center", borderTop: `1px solid ${T.border}` }}>
       <Reveal>
-        <SectionLabel>Get in touch</SectionLabel>
+        <SectionLabel>{t.getInTouch}</SectionLabel>
         <h2 style={{ fontSize: "clamp(36px, 6vw, 88px)", fontWeight: 500, letterSpacing: "-0.02em", margin: "0 0 40px", color: T.text, lineHeight: 1.05 }}>
-          Have a project in mind?
+          {t.haveProject}
         </h2>
-        <Button variant="cta" onClick={() => go("contact")}>Let's Work Together</Button>
+        <Button variant="cta" onClick={() => go("contact")}>{t.letsWork}</Button>
       </Reveal>
     </section>
   );
 }
 
 function Footer({ go }) {
+  const { t } = useThemeLang();
+  const sitemapKeys = [
+    ["home", t.navWork === "الأعمال" ? "الرئيسية" : "Home"],
+    ["work", t.navWork],
+    ["services", t.navServices],
+    ["about", t.navAbout],
+    ["contact", t.navContact],
+  ];
   return (
     <footer style={{ padding: "64px 5vw 48px", borderTop: `1px solid ${T.border}` }}>
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 48 }}>
         <div style={{ maxWidth: 260 }}>
-          <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 12, color: T.text }}>Ferrum Studio</div>
+          <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 12, color: T.text }}>{t.brand}</div>
           <div style={{ fontSize: 14, color: T.textSec, lineHeight: 1.6 }}>
-            A creative studio for brands that want to look like nobody else.
+            {t.footerTagline}
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <span style={{ fontSize: 13, color: T.textSec, marginBottom: 4 }}>Sitemap</span>
-          {["home", "work", "services", "about", "contact"].map((k) => (
-            <span key={k} onClick={() => go(k)} style={{ cursor: "pointer", fontSize: 14, color: T.text, textTransform: "capitalize" }}>{k}</span>
+          <span style={{ fontSize: 13, color: T.textSec, marginBottom: 4 }}>{t.sitemap}</span>
+          {sitemapKeys.map(([k, label]) => (
+            <span key={k} onClick={() => go(k)} style={{ cursor: "pointer", fontSize: 14, color: T.text }}>{label}</span>
           ))}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <span style={{ fontSize: 13, color: T.textSec, marginBottom: 4 }}>Contact</span>
-          <span style={{ fontSize: 14, color: T.text }}>hello@ferrumstudio.co</span>
-          <span style={{ fontSize: 14, color: T.text }}>+971 4 000 0000</span>
+          <span style={{ fontSize: 13, color: T.textSec, marginBottom: 4 }}>{t.contact}</span>
+          <span style={{ fontSize: 14, color: T.text, direction: "ltr", textAlign: t.brand === "استوديو فيروم" ? "right" : "left" }}>hello@ferrumstudio.co</span>
+          <span style={{ fontSize: 14, color: T.text, direction: "ltr", textAlign: t.brand === "استوديو فيروم" ? "right" : "left" }}>+971 4 000 0000</span>
           <span style={{ fontSize: 14, color: T.textSec }}>Dubai, UAE</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <span style={{ fontSize: 13, color: T.textSec, marginBottom: 4 }}>Social</span>
+          <span style={{ fontSize: 13, color: T.textSec, marginBottom: 4 }}>{t.social}</span>
           {["Instagram", "Behance", "LinkedIn"].map((s) => (
             <span key={s} style={{ fontSize: 14, color: T.text, cursor: "pointer" }}>{s}</span>
           ))}
         </div>
       </div>
       <div style={{ marginTop: 64, paddingTop: 24, borderTop: `1px solid ${T.border}`, fontSize: 12, color: T.textSec }}>
-        © 2026 Ferrum Studio. All rights reserved.
+        © 2026 {t.brand}. {t.rights}
       </div>
     </footer>
   );
@@ -373,6 +553,7 @@ function ProjectBlock({ project, span, onOpen, toneIdx }) {
 /* ---------- HOME PAGE ---------- */
 
 function Home({ go, openProject }) {
+  const { t } = useThemeLang();
   const featured = PROJECTS.slice(0, 4);
   const spans = ["span 8", "span 4", "span 12", "span 6"];
   const seconds = ["span 4", "span 8", null, "span 6"];
@@ -382,20 +563,20 @@ function Home({ go, openProject }) {
       {/* HERO */}
       <section style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "0 5vw 96px", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>
-          <Placeholder label="Hero visual — signature 3D render" ratio="100%" tone={0} />
+          <Placeholder label="Ferrum Studio hero" ratio="100%" tone={0} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #0A0A0A 5%, rgba(10,10,10,0.2) 60%)" }} />
         </div>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(48px, 9vw, 150px)", fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 0.98, margin: "0 0 24px", color: T.text, maxWidth: 1100 }}>
-            We build things worth looking at twice.
+          <h1 style={{ fontSize: "clamp(40px, 9vw, 150px)", fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 0.98, margin: "0 0 24px", color: T.text, maxWidth: 1100 }}>
+            {t.heroHeadline}
           </h1>
         </Reveal>
         <Reveal delay={150}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
             <p style={{ fontSize: 18, color: T.textSec, maxWidth: 420, margin: 0, lineHeight: 1.6 }}>
-              A creative studio working across branding, 3D, advertising and film for clients who don't want to look like anyone else.
+              {t.heroSub}
             </p>
-            <Button variant="cta" onClick={() => go("work")}>See the Work</Button>
+            <Button variant="cta" onClick={() => go("work")}>{t.heroCta}</Button>
           </div>
         </Reveal>
       </section>
@@ -403,9 +584,9 @@ function Home({ go, openProject }) {
       {/* INTRO */}
       <section style={{ padding: "128px 5vw", maxWidth: 780 }}>
         <Reveal>
-          <SectionLabel>Who we are</SectionLabel>
+          <SectionLabel>{t.whoWeAre}</SectionLabel>
           <p style={{ fontSize: "clamp(22px, 3vw, 34px)", lineHeight: 1.4, color: T.text, fontWeight: 400 }}>
-            Ferrum Studio is a small team of designers, 3D artists and directors based in Dubai, working with brands, founders and institutions across the region who need their work to hold up in a crowded room.
+            {t.introText}
           </p>
         </Reveal>
       </section>
@@ -414,8 +595,8 @@ function Home({ go, openProject }) {
       <section style={{ padding: "0 5vw 128px" }}>
         <Reveal>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 40 }}>
-            <h2 style={{ fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.01em" }}>Selected Work</h2>
-            <span onClick={() => go("work")} style={{ cursor: "pointer", fontSize: 14, color: T.textSec, borderBottom: `1px solid ${T.border}` }}>View all projects</span>
+            <h2 style={{ fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.01em" }}>{t.selectedWork}</h2>
+            <span onClick={() => go("work")} style={{ cursor: "pointer", fontSize: 14, color: T.textSec, borderBottom: `1px solid ${T.border}` }}>{t.viewAll}</span>
           </div>
         </Reveal>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: 24 }}>
@@ -429,7 +610,7 @@ function Home({ go, openProject }) {
 
       {/* SERVICES (compact list) */}
       <section style={{ padding: "0 5vw 128px" }}>
-        <Reveal><SectionLabel>What we do</SectionLabel></Reveal>
+        <Reveal><SectionLabel>{t.whatWeDo}</SectionLabel></Reveal>
         <div>
           {SERVICES.slice(0, 6).map((s, i) => (
             <Reveal key={s.name} delay={i * 40}>
@@ -443,14 +624,14 @@ function Home({ go, openProject }) {
       <section style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 5vw", textAlign: "center", borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}` }}>
         <Reveal>
           <h3 style={{ fontSize: "clamp(28px, 5vw, 72px)", fontWeight: 500, lineHeight: 1.2, maxWidth: 1000, color: T.text, letterSpacing: "-0.01em" }}>
-            Good work looks effortless. It rarely is. We spend the effort so it doesn't show.
+            {t.statement}
           </h3>
         </Reveal>
       </section>
 
       {/* CLIENTS */}
       <section style={{ padding: "80px 5vw" }}>
-        <Reveal><SectionLabel>Selected Clients</SectionLabel></Reveal>
+        <Reveal><SectionLabel>{t.selectedClients}</SectionLabel></Reveal>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "32px 48px" }}>
           {CLIENTS.map((c) => (
             <span key={c} style={{ fontSize: 15, color: T.textSec, transition: "color 300ms ease", cursor: "default" }}
@@ -493,6 +674,7 @@ function ServiceRow({ service, onClick }) {
 /* ---------- WORK PAGE ---------- */
 
 function Work({ go, openProject }) {
+  const { t } = useThemeLang();
   const [filter, setFilter] = useState("All");
   const filtered = filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
   const spanFor = (size) => (size === "large" ? "span 8" : size === "full" ? "span 12" : size === "medium" ? "span 6" : "span 4");
@@ -501,7 +683,7 @@ function Work({ go, openProject }) {
     <>
       <section style={{ padding: "160px 5vw 48px" }}>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(40px, 6vw, 88px)", fontWeight: 500, color: T.text, margin: "0 0 40px", letterSpacing: "-0.02em" }}>Work</h1>
+          <h1 style={{ fontSize: "clamp(40px, 6vw, 88px)", fontWeight: 500, color: T.text, margin: "0 0 40px", letterSpacing: "-0.02em" }}>{t.workTitle}</h1>
         </Reveal>
         <Reveal delay={100}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 24, borderBottom: `1px solid ${T.border}`, paddingBottom: 24, overflowX: "auto" }}>
@@ -528,7 +710,7 @@ function Work({ go, openProject }) {
       <section style={{ padding: "0 5vw 128px" }}>
         {filtered.length === 0 ? (
           <div style={{ padding: "80px 0", textAlign: "center", color: T.textSec, fontSize: 14 }}>
-            No projects found — try another filter.
+            {t.noProjects}
           </div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: 24 }}>
@@ -549,6 +731,7 @@ function Work({ go, openProject }) {
 /* ---------- PROJECT DETAIL PAGE ---------- */
 
 function ProjectDetail({ project, go, next, openProject }) {
+  const { t } = useThemeLang();
   if (!project) return null;
   return (
     <>
@@ -569,7 +752,7 @@ function ProjectDetail({ project, go, next, openProject }) {
 
       <section style={{ padding: "0 5vw 96px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: 64 }} className="ferrum-detail-grid">
         <Reveal>
-          <SectionLabel>Overview</SectionLabel>
+          <SectionLabel>{t.overview}</SectionLabel>
           <p style={{ fontSize: 20, lineHeight: 1.6, color: T.text, maxWidth: 620 }}>{project.overview}</p>
         </Reveal>
         <Reveal delay={100}>
@@ -586,7 +769,7 @@ function ProjectDetail({ project, go, next, openProject }) {
 
       <section style={{ padding: "0 5vw 96px", maxWidth: 720 }}>
         <Reveal>
-          <SectionLabel>Creative Concept</SectionLabel>
+          <SectionLabel>{t.concept}</SectionLabel>
           <p style={{ fontSize: 20, lineHeight: 1.7, color: T.text }}>{project.concept}</p>
         </Reveal>
       </section>
@@ -601,14 +784,14 @@ function ProjectDetail({ project, go, next, openProject }) {
 
       <section style={{ padding: "0 5vw 128px", maxWidth: 720 }}>
         <Reveal>
-          <SectionLabel>Outcome</SectionLabel>
+          <SectionLabel>{t.outcome}</SectionLabel>
           <p style={{ fontSize: 22, lineHeight: 1.5, color: T.text }}>{project.results}</p>
         </Reveal>
       </section>
 
       {next && (
         <div onClick={() => openProject(next)} style={{ cursor: "pointer", borderTop: `1px solid ${T.border}`, padding: "64px 5vw", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: 13, color: T.textSec }}>Next Project</span>
+          <span style={{ fontSize: 13, color: T.textSec }}>{t.nextProject}</span>
           <span style={{ fontSize: "clamp(24px,4vw,48px)", color: T.text }}>{next.name}</span>
         </div>
       )}
@@ -627,12 +810,13 @@ function ProjectDetail({ project, go, next, openProject }) {
 /* ---------- SERVICES PAGE ---------- */
 
 function ServicesPage({ go }) {
+  const { t } = useThemeLang();
   return (
     <>
       <section style={{ padding: "160px 5vw 80px" }}>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(40px, 6vw, 88px)", fontWeight: 500, color: T.text, margin: "0 0 20px", letterSpacing: "-0.02em" }}>Services</h1>
-          <p style={{ fontSize: 18, color: T.textSec, maxWidth: 520 }}>Seven capabilities, one studio. We move between them depending on what the brief actually needs.</p>
+          <h1 style={{ fontSize: "clamp(40px, 6vw, 88px)", fontWeight: 500, color: T.text, margin: "0 0 20px", letterSpacing: "-0.02em" }}>{t.servicesTitle}</h1>
+          <p style={{ fontSize: 18, color: T.textSec, maxWidth: 520 }}>{t.servicesSub}</p>
         </Reveal>
       </section>
 
@@ -680,6 +864,7 @@ function ServiceDetail({ s }) {
 /* ---------- ABOUT PAGE ---------- */
 
 function About({ go }) {
+  const { t } = useThemeLang();
   const values = [
     { title: "Craft over noise", text: "We'd rather ship one considered idea than ten loud ones." },
     { title: "Client work first", text: "Nothing on this site is decoration for its own sake — it exists to sell the work." },
@@ -690,7 +875,7 @@ function About({ go }) {
       <section style={{ padding: "160px 5vw 80px" }}>
         <Reveal>
           <h1 style={{ fontSize: "clamp(36px, 6vw, 80px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.02em", maxWidth: 900 }}>
-            We build visual worlds for people with something specific to say.
+            {t.aboutHeadline}
           </h1>
         </Reveal>
       </section>
@@ -698,9 +883,9 @@ function About({ go }) {
       <section style={{ padding: "0 5vw 96px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }} className="ferrum-detail-grid">
         <Reveal><Placeholder label="Studio photograph" ratio="110%" tone={1} /></Reveal>
         <Reveal delay={100}>
-          <SectionLabel>Our story</SectionLabel>
+          <SectionLabel>{t.ourStory}</SectionLabel>
           <p style={{ fontSize: 18, lineHeight: 1.7, color: T.text }}>
-            Ferrum Studio started in 2019 as a two-person 3D shop working nights on architectural renders. Six years on, we're a full creative studio — but the standard hasn't moved: every project has to earn its place in the portfolio, ours or the client's.
+            {t.aboutStoryText}
           </p>
         </Reveal>
       </section>
@@ -730,6 +915,7 @@ function About({ go }) {
 /* ---------- CONTACT PAGE ---------- */
 
 function Contact() {
+  const { t } = useThemeLang();
   const [form, setForm] = useState({ name: "", email: "", phone: "", company: "", type: "Branding", message: "" });
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
@@ -739,9 +925,9 @@ function Contact() {
   const submit = (e) => {
     e.preventDefault();
     const errs = {};
-    if (!form.name.trim()) errs.name = "Enter your name.";
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = "Enter a valid email.";
-    if (!form.message.trim()) errs.message = "Tell us a little about the project.";
+    if (!form.name.trim()) errs.name = t.errName;
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = t.errEmail;
+    if (!form.message.trim()) errs.message = t.errMessage;
     setErrors(errs);
     if (Object.keys(errs).length === 0) setSent(true);
   };
@@ -763,8 +949,8 @@ function Contact() {
     return (
       <section style={{ minHeight: "80vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "160px 5vw", textAlign: "center" }}>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(32px, 5vw, 56px)", color: T.text, fontWeight: 500, marginBottom: 16 }}>Message sent.</h1>
-          <p style={{ color: T.textSec, fontSize: 16 }}>We read every message ourselves — expect a reply within two business days.</p>
+          <h1 style={{ fontSize: "clamp(32px, 5vw, 56px)", color: T.text, fontWeight: 500, marginBottom: 16 }}>{t.sentTitle}</h1>
+          <p style={{ color: T.textSec, fontSize: 16 }}>{t.sentBody}</p>
         </Reveal>
       </section>
     );
@@ -775,46 +961,46 @@ function Contact() {
       <div>
         <Reveal>
           <h1 style={{ fontSize: "clamp(36px, 6vw, 76px)", fontWeight: 500, color: T.text, margin: "0 0 48px", letterSpacing: "-0.02em" }}>
-            Let's talk.
+            {t.letsTalk}
           </h1>
         </Reveal>
         <Reveal delay={100}>
           <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 32 }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="ferrum-form-row">
               <div>
-                <div style={labelStyle}>Name</div>
+                <div style={labelStyle}>{t.name}</div>
                 <input style={fieldStyle} value={form.name} onChange={set("name")} />
                 {errors.name && <div style={{ color: "#e08a7d", fontSize: 12, marginTop: 6 }}>{errors.name}</div>}
               </div>
               <div>
-                <div style={labelStyle}>Email</div>
+                <div style={labelStyle}>{t.email}</div>
                 <input style={fieldStyle} value={form.email} onChange={set("email")} />
                 {errors.email && <div style={{ color: "#e08a7d", fontSize: 12, marginTop: 6 }}>{errors.email}</div>}
               </div>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="ferrum-form-row">
               <div>
-                <div style={labelStyle}>Phone</div>
+                <div style={labelStyle}>{t.phone}</div>
                 <input style={fieldStyle} value={form.phone} onChange={set("phone")} />
               </div>
               <div>
-                <div style={labelStyle}>Company</div>
+                <div style={labelStyle}>{t.company}</div>
                 <input style={fieldStyle} value={form.company} onChange={set("company")} />
               </div>
             </div>
             <div>
-              <div style={labelStyle}>Project type</div>
+              <div style={labelStyle}>{t.projectType}</div>
               <select style={{ ...fieldStyle, appearance: "none" }} value={form.type} onChange={set("type")}>
                 {SERVICES.map((s) => (<option key={s.name} style={{ background: T.bg }}>{s.name}</option>))}
               </select>
             </div>
             <div>
-              <div style={labelStyle}>Message</div>
+              <div style={labelStyle}>{t.message}</div>
               <textarea rows={4} style={{ ...fieldStyle, resize: "vertical" }} value={form.message} onChange={set("message")} />
               {errors.message && <div style={{ color: "#e08a7d", fontSize: 12, marginTop: 6 }}>{errors.message}</div>}
             </div>
             <div>
-              <Button variant="cta" onClick={submit} style={{ width: "fit-content" }}>Send Message</Button>
+              <Button variant="cta" onClick={submit} style={{ width: "fit-content" }}>{t.send}</Button>
             </div>
           </form>
         </Reveal>
@@ -823,10 +1009,10 @@ function Contact() {
       <Reveal delay={150}>
         <div style={{ display: "flex", flexDirection: "column", gap: 32, paddingTop: 8 }}>
           {[
-            ["Email", "hello@ferrumstudio.co"],
-            ["Phone", "+971 4 000 0000"],
-            ["WhatsApp", "+971 50 000 0000"],
-            ["Location", "Dubai, UAE"],
+            [t.email, "hello@ferrumstudio.co"],
+            [t.phone, "+971 4 000 0000"],
+            [t.whatsapp, "+971 50 000 0000"],
+            [t.location, "Dubai, UAE"],
           ].map(([k, v]) => (
             <div key={k}>
               <div style={{ fontSize: 12, color: T.textSec, marginBottom: 4 }}>{k}</div>
@@ -856,6 +1042,34 @@ function Contact() {
 export default function App() {
   const [page, setPage] = useState("home");
   const [activeProject, setActiveProject] = useState(null);
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = window.localStorage?.getItem("fs-theme");
+      if (saved) return saved;
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+    }
+    return "dark";
+  });
+  const [lang, setLang] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.localStorage?.getItem("fs-lang") || "ar";
+    }
+    return "ar";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-fs-theme", theme);
+    window.localStorage?.setItem("fs-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    document.documentElement.setAttribute("lang", lang);
+    window.localStorage?.setItem("fs-lang", lang);
+  }, [lang]);
+
+  const toggleTheme = () => setTheme((th) => (th === "dark" ? "light" : "dark"));
+  const toggleLang = () => setLang((l) => (l === "en" ? "ar" : "en"));
 
   const go = (p) => {
     setPage(p);
@@ -873,16 +1087,39 @@ export default function App() {
     ? PROJECTS[(PROJECTS.findIndex((p) => p.id === activeProject.id) + 1) % PROJECTS.length]
     : null;
 
+  const t = DICT[lang] || DICT.en;
+
   return (
-    <div style={{ background: T.bg, color: T.text, fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif", minHeight: "100vh" }}>
-      <Nav page={page} go={go} />
-      {page === "home" && <Home go={go} openProject={openProject} />}
-      {page === "work" && <Work go={go} openProject={openProject} />}
-      {page === "project" && <ProjectDetail project={activeProject} go={go} next={nextProject} openProject={openProject} />}
-      {page === "services" && <ServicesPage go={go} />}
-      {page === "about" && <About go={go} />}
-      {page === "contact" && <Contact />}
-      <Footer go={go} />
-    </div>
+    <ThemeLangContext.Provider value={{ theme, lang, t, toggleTheme, toggleLang }}>
+      <style>{THEME_VARS}</style>
+      <style>{`
+        html, body { background: var(--fs-bg); }
+        ::selection { background: var(--fs-accent); color: var(--fs-bg); }
+        [dir="rtl"] .ferrum-detail-grid,
+        [dir="rtl"] .ferrum-contact-grid { direction: rtl; }
+        input, textarea, select { direction: inherit; }
+      `}</style>
+      <div
+        dir={lang === "ar" ? "rtl" : "ltr"}
+        style={{
+          background: T.bg,
+          color: T.text,
+          fontFamily: lang === "ar"
+            ? "'Tajawal', 'Segoe UI', 'Inter', sans-serif"
+            : "'Inter', 'Helvetica Neue', Arial, sans-serif",
+          minHeight: "100vh",
+          transition: "background 300ms ease, color 300ms ease",
+        }}
+      >
+        <Nav page={page} go={go} />
+        {page === "home" && <Home go={go} openProject={openProject} />}
+        {page === "work" && <Work go={go} openProject={openProject} />}
+        {page === "project" && <ProjectDetail project={activeProject} go={go} next={nextProject} openProject={openProject} />}
+        {page === "services" && <ServicesPage go={go} />}
+        {page === "about" && <About go={go} />}
+        {page === "contact" && <Contact />}
+        <Footer go={go} />
+      </div>
+    </ThemeLangContext.Provider>
   );
 }
