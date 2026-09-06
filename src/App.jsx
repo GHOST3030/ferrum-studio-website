@@ -3,28 +3,98 @@ import React, { useState, useEffect, useRef } from "react";
 /* ---------- DATA ---------- */
 
 const PROJECTS = [
-  { id: "aurora", name: "Aurora Skincare", category: "Branding", year: "2025", size: "large", client: "Aurora Labs", role: "Identity, Packaging, Art Direction", overview: "A full identity rebuild for a skincare brand entering the Gulf market — from wordmark to shelf presence.", concept: "We treated the brand like a material study: light passing through gel, oil, and glass. The palette and motion language all trace back to that one optical idea.", results: "Launched across 40 retail doors in Q1 2025; brand recall lifted 3x in post-launch tracking." },
-  { id: "monolith", name: "Monolith", category: "3D", year: "2025", size: "small", client: "Monolith Studio", role: "3D Visualization", overview: "A set of architectural renders for a concrete-and-glass residential concept.", concept: "Weight and silence — every render pushes contrast until the structure feels carved rather than built.", results: "Used in the developer's investor deck; renders featured in two architecture publications." },
-  { id: "veyra", name: "Veyra Airlines", category: "Advertising", year: "2024", size: "full", client: "Veyra", role: "Campaign, OOH, Motion", overview: "A regional launch campaign built around a single idea: distance is a feeling, not a number.", concept: "Every asset frames the horizon slightly off-center — restlessness held just under control.", results: "Campaign ran across 6 airports and reached 12M impressions in the first month." },
-  { id: "nomad", name: "Nomad Coffee", category: "Graphic Design", year: "2024", size: "medium", client: "Nomad Coffee Co.", role: "Packaging, Print", overview: "Packaging system for a specialty coffee roaster sourcing from four countries.", concept: "Each origin gets its own typographic mark, unified by one shared grid.", results: "Packaging redesign coincided with a 22% increase in repeat online orders." },
-  { id: "pulse", name: "Pulse", category: "Motion", year: "2024", size: "medium", client: "Pulse Fitness", role: "Motion Graphics", overview: "A motion identity for a fitness app's onboarding and achievement moments.", concept: "Movement that mirrors a heartbeat — sharp attack, soft release.", results: "Onboarding completion improved 18% after the new motion sequences shipped." },
-  { id: "sable", name: "Sable House", category: "Photography", year: "2023", size: "large", client: "Sable House Hotels", role: "Photography, Art Direction", overview: "Editorial photography for a boutique hotel group's five properties.", concept: "Shot only at the edges of the day — the hour when the buildings feel most like themselves.", results: "Imagery adopted across the group's entire booking platform and print collateral." },
-  { id: "kite", name: "Kite Social", category: "Social Media", year: "2023", size: "small", client: "Kite", role: "Social Design System", overview: "A modular content system built for a two-person social team to move fast without losing consistency.", concept: "A small set of rules that produce endless, on-brand variation.", results: "Content output tripled with no increase in team size." },
+  {
+    id: "aurora", name: { en: "Aurora Skincare", ar: "أورورا للعناية بالبشرة" }, category: "Branding", year: "2025", size: "large",
+    client: { en: "Aurora Labs", ar: "أورورا لابز" },
+    role: { en: "Identity, Packaging, Art Direction", ar: "الهوية، التغليف، الإخراج الفني" },
+    overview: { en: "A full identity rebuild for a skincare brand entering the Gulf market — from wordmark to shelf presence.", ar: "إعادة بناء كاملة للهوية البصرية لعلامة عناية بالبشرة تدخل السوق الخليجي — من الشعار إلى الحضور على الرف." },
+    concept: { en: "We treated the brand like a material study: light passing through gel, oil, and glass. The palette and motion language all trace back to that one optical idea.", ar: "تعاملنا مع العلامة كدراسة للمواد: الضوء يمر عبر الجل والزيت والزجاج. لوحة الألوان ولغة الحركة كلها تعود لتلك الفكرة البصرية الواحدة." },
+    results: { en: "Launched across 40 retail doors in Q1 2025; brand recall lifted 3x in post-launch tracking.", ar: "تم الإطلاق في 40 منفذ بيع في الربع الأول من 2025؛ ارتفع تذكر العلامة 3 أضعاف بعد الإطلاق." },
+  },
+  {
+    id: "monolith", name: { en: "Monolith", ar: "مونوليث" }, category: "3D", year: "2025", size: "small",
+    client: { en: "Monolith Studio", ar: "استوديو مونوليث" },
+    role: { en: "3D Visualization", ar: "تصور ثلاثي الأبعاد" },
+    overview: { en: "A set of architectural renders for a concrete-and-glass residential concept.", ar: "مجموعة من التصورات المعمارية لمشروع سكني من الخرسانة والزجاج." },
+    concept: { en: "Weight and silence — every render pushes contrast until the structure feels carved rather than built.", ar: "الثقل والصمت — كل تصور يدفع التباين حتى يشعر المبنى وكأنه منحوت لا مبني." },
+    results: { en: "Used in the developer's investor deck; renders featured in two architecture publications.", ar: "استُخدمت في عرض المستثمرين للمطور؛ ونُشرت التصورات في مجلتين معماريتين." },
+  },
+  {
+    id: "veyra", name: { en: "Veyra Airlines", ar: "طيران فيرا" }, category: "Advertising", year: "2024", size: "full",
+    client: { en: "Veyra", ar: "فيرا" },
+    role: { en: "Campaign, OOH, Motion", ar: "حملة إعلانية، إعلانات خارجية، موشن" },
+    overview: { en: "A regional launch campaign built around a single idea: distance is a feeling, not a number.", ar: "حملة إطلاق إقليمية مبنية على فكرة واحدة: المسافة إحساس لا رقم." },
+    concept: { en: "Every asset frames the horizon slightly off-center — restlessness held just under control.", ar: "كل عنصر بصري يؤطر الأفق بانحراف بسيط عن المركز — قلق مضبوط تحت السيطرة بالكاد." },
+    results: { en: "Campaign ran across 6 airports and reached 12M impressions in the first month.", ar: "عُرضت الحملة في 6 مطارات ووصلت إلى 12 مليون ظهور في الشهر الأول." },
+  },
+  {
+    id: "nomad", name: { en: "Nomad Coffee", ar: "نومَد كوفي" }, category: "Graphic Design", year: "2024", size: "medium",
+    client: { en: "Nomad Coffee Co.", ar: "شركة نومَد للقهوة" },
+    role: { en: "Packaging, Print", ar: "التغليف، الطباعة" },
+    overview: { en: "Packaging system for a specialty coffee roaster sourcing from four countries.", ar: "نظام تغليف لمحمصة قهوة مختصة تستورد من أربع دول." },
+    concept: { en: "Each origin gets its own typographic mark, unified by one shared grid.", ar: "كل منشأ يحصل على بصمة طباعية خاصة به، توحدها شبكة تصميم واحدة." },
+    results: { en: "Packaging redesign coincided with a 22% increase in repeat online orders.", ar: "تزامن إعادة تصميم التغليف مع زيادة 22% في الطلبات المتكررة أونلاين." },
+  },
+  {
+    id: "pulse", name: { en: "Pulse", ar: "بلس" }, category: "Motion", year: "2024", size: "medium",
+    client: { en: "Pulse Fitness", ar: "بلس للياقة البدنية" },
+    role: { en: "Motion Graphics", ar: "موشن جرافيك" },
+    overview: { en: "A motion identity for a fitness app's onboarding and achievement moments.", ar: "هوية حركية لتطبيق لياقة بدنية، لحظات التهيئة والإنجاز." },
+    concept: { en: "Movement that mirrors a heartbeat — sharp attack, soft release.", ar: "حركة تحاكي نبضة القلب — بداية حادة ونهاية ناعمة." },
+    results: { en: "Onboarding completion improved 18% after the new motion sequences shipped.", ar: "تحسّن إتمام التهيئة بنسبة 18% بعد إطلاق تسلسلات الحركة الجديدة." },
+  },
+  {
+    id: "sable", name: { en: "Sable House", ar: "سيبل هاوس" }, category: "Photography", year: "2023", size: "large",
+    client: { en: "Sable House Hotels", ar: "فنادق سيبل هاوس" },
+    role: { en: "Photography, Art Direction", ar: "التصوير، الإخراج الفني" },
+    overview: { en: "Editorial photography for a boutique hotel group's five properties.", ar: "تصوير تحريري لخمسة فنادق تابعة لمجموعة فنادق بوتيكية." },
+    concept: { en: "Shot only at the edges of the day — the hour when the buildings feel most like themselves.", ar: "تم التصوير فقط في أطراف اليوم — الساعة التي تشعر فيها المباني بأنها على طبيعتها أكثر." },
+    results: { en: "Imagery adopted across the group's entire booking platform and print collateral.", ar: "اعتُمدت الصور في منصة الحجز الكاملة للمجموعة والمطبوعات." },
+  },
+  {
+    id: "kite", name: { en: "Kite Social", ar: "كايت سوشال" }, category: "Social Media", year: "2023", size: "small",
+    client: { en: "Kite", ar: "كايت" },
+    role: { en: "Social Design System", ar: "نظام تصميم للسوشيال ميديا" },
+    overview: { en: "A modular content system built for a two-person social team to move fast without losing consistency.", ar: "نظام محتوى معياري لفريق سوشيال ميديا من شخصين، يتحرك بسرعة دون فقدان الاتساق." },
+    concept: { en: "A small set of rules that produce endless, on-brand variation.", ar: "مجموعة صغيرة من القواعد تنتج تنوعاً لا نهائياً متسقاً مع الهوية." },
+    results: { en: "Content output tripled with no increase in team size.", ar: "تضاعف إنتاج المحتوى ثلاث مرات دون زيادة حجم الفريق." },
+  },
 ];
+
+const CATEGORY_LABELS = {
+  en: { All: "All", Branding: "Branding", "3D": "3D", Advertising: "Advertising", "Graphic Design": "Graphic Design", Motion: "Motion", Photography: "Photography", "Social Media": "Social Media" },
+  ar: { All: "الكل", Branding: "الهوية البصرية", "3D": "ثلاثي الأبعاد", Advertising: "الإعلان", "Graphic Design": "الجرافيك", Motion: "الموشن", Photography: "التصوير", "Social Media": "السوشيال ميديا" },
+};
 
 const SERVICES = [
-  { name: "Branding", description: "Identity systems built to hold up across packaging, motion, and space — not just a logo file.", capabilities: ["Naming & positioning", "Visual identity systems", "Brand guidelines"] },
-  { name: "3D Design", description: "Photoreal and stylized 3D for products, spaces, and worlds that don't exist yet.", capabilities: ["Product visualization", "Architectural rendering", "3D art direction"] },
-  { name: "Advertising", description: "Campaigns built around one idea, carried consistently across every format it touches.", capabilities: ["Campaign concepting", "OOH & print", "Art direction"] },
-  { name: "Graphic Design", description: "Print and packaging systems that hold together at a glance and reward a closer look.", capabilities: ["Packaging", "Editorial layout", "Print production"] },
-  { name: "Motion", description: "Motion identities that make an interface or a brand feel alive without feeling loud.", capabilities: ["Motion identity", "Explainer & product film", "Micro-interaction design"] },
-  { name: "Photography", description: "Photography direction that treats light like part of the brief, not an afterthought.", capabilities: ["Product photography", "Editorial & lifestyle", "Art direction"] },
-  { name: "Video Production", description: "Short-form and campaign film, shot and cut to hold attention without tricks.", capabilities: ["Campaign film", "Product film", "Post-production"] },
+  { id: "Branding", name: { en: "Branding", ar: "الهوية البصرية" }, description: { en: "Identity systems built to hold up across packaging, motion, and space — not just a logo file.", ar: "أنظمة هوية مصممة لتصمد عبر التغليف والحركة والمكان — لا مجرد ملف شعار." }, capabilities: { en: ["Naming & positioning", "Visual identity systems", "Brand guidelines"], ar: ["التسمية والتموضع", "أنظمة الهوية البصرية", "دليل العلامة التجارية"] } },
+  { id: "3D Design", name: { en: "3D Design", ar: "تصميم ثلاثي الأبعاد" }, description: { en: "Photoreal and stylized 3D for products, spaces, and worlds that don't exist yet.", ar: "تصاميم ثلاثية الأبعاد واقعية وأسلوبية لمنتجات وأماكن وعوالم لم توجد بعد." }, capabilities: { en: ["Product visualization", "Architectural rendering", "3D art direction"], ar: ["تصور المنتجات", "التصور المعماري", "الإخراج الفني ثلاثي الأبعاد"] } },
+  { id: "Advertising", name: { en: "Advertising", ar: "الإعلان" }, description: { en: "Campaigns built around one idea, carried consistently across every format it touches.", ar: "حملات مبنية حول فكرة واحدة، تحملها بثبات عبر كل صيغة تلامسها." }, capabilities: { en: ["Campaign concepting", "OOH & print", "Art direction"], ar: ["ابتكار الحملات", "الإعلانات الخارجية والمطبوعة", "الإخراج الفني"] } },
+  { id: "Graphic Design", name: { en: "Graphic Design", ar: "الجرافيك" }, description: { en: "Print and packaging systems that hold together at a glance and reward a closer look.", ar: "أنظمة طباعة وتغليف متماسكة من أول نظرة وتكافئ من يدقق فيها." }, capabilities: { en: ["Packaging", "Editorial layout", "Print production"], ar: ["التغليف", "التصميم التحريري", "إنتاج المطبوعات"] } },
+  { id: "Motion", name: { en: "Motion", ar: "الموشن" }, description: { en: "Motion identities that make an interface or a brand feel alive without feeling loud.", ar: "هويات حركية تمنح الواجهة أو العلامة إحساساً بالحياة دون صخب." }, capabilities: { en: ["Motion identity", "Explainer & product film", "Micro-interaction design"], ar: ["الهوية الحركية", "أفلام شرح وعرض المنتج", "تصميم التفاعلات الدقيقة"] } },
+  { id: "Photography", name: { en: "Photography", ar: "التصوير" }, description: { en: "Photography direction that treats light like part of the brief, not an afterthought.", ar: "إخراج تصوير يتعامل مع الضوء كجزء من الفكرة، لا كتفصيل ثانوي." }, capabilities: { en: ["Product photography", "Editorial & lifestyle", "Art direction"], ar: ["تصوير المنتجات", "التصوير التحريري وأسلوب الحياة", "الإخراج الفني"] } },
+  { id: "Video Production", name: { en: "Video Production", ar: "الإنتاج المرئي" }, description: { en: "Short-form and campaign film, shot and cut to hold attention without tricks.", ar: "أفلام قصيرة وحملات مصورة، تُصوَّر وتُمنتج لتشد الانتباه دون حيل." }, capabilities: { en: ["Campaign film", "Product film", "Post-production"], ar: ["أفلام الحملات", "أفلام المنتج", "ما بعد الإنتاج"] } },
 ];
 
-const CLIENTS = ["Aurora Labs", "Monolith Studio", "Veyra", "Nomad Coffee Co.", "Pulse Fitness", "Sable House Hotels", "Kite", "Ferrum"];
+const CLIENTS = [
+  { en: "Aurora Labs", ar: "أورورا لابز" },
+  { en: "Monolith Studio", ar: "استوديو مونوليث" },
+  { en: "Veyra", ar: "فيرا" },
+  { en: "Nomad Coffee Co.", ar: "شركة نومَد للقهوة" },
+  { en: "Pulse Fitness", ar: "بلس للياقة البدنية" },
+  { en: "Sable House Hotels", ar: "فنادق سيبل هاوس" },
+  { en: "Kite", ar: "كايت" },
+  { en: "Ferrum", ar: "فيروم" },
+];
 
 const FILTERS = ["All", "Branding", "3D", "Advertising", "Graphic Design", "Motion", "Photography", "Social Media"];
+
+function pick(obj, lang) {
+  if (obj == null) return obj;
+  if (typeof obj === "object" && !Array.isArray(obj)) return obj[lang] || obj.en;
+  return obj;
+}
+
 
 /* ---------- STYLE TOKENS ---------- */
 
@@ -116,6 +186,24 @@ const DICT = {
     errName: "Enter your name.",
     errEmail: "Enter a valid email.",
     errMessage: "Tell us a little about the project.",
+    fieldClient: "Client",
+    fieldYear: "Year",
+    fieldCategory: "Category",
+    fieldRole: "Role",
+    heroArtworkSuffix: "— hero artwork",
+    fullWidthVisual: "Full-width visual",
+    detailImg1: "Detail 01",
+    detailImg2: "Detail 02",
+    socialInstagram: "Instagram",
+    socialBehance: "Behance",
+    socialLinkedin: "LinkedIn",
+    dubaiUae: "Dubai, UAE",
+    studioPhoto: "Studio photograph",
+    aboutValues: [
+      { title: "Craft over noise", text: "We'd rather ship one considered idea than ten loud ones." },
+      { title: "Client work first", text: "Nothing on this site is decoration for its own sake — it exists to sell the work." },
+      { title: "Direct feedback", text: "We tell clients what we actually think, even when it's not what they expected to hear." },
+    ],
   },
   ar: {
     brand: "استوديو فيروم",
@@ -168,6 +256,24 @@ const DICT = {
     errName: "الرجاء إدخال اسمك.",
     errEmail: "الرجاء إدخال بريد إلكتروني صحيح.",
     errMessage: "أخبرنا قليلاً عن مشروعك.",
+    fieldClient: "العميل",
+    fieldYear: "السنة",
+    fieldCategory: "الفئة",
+    fieldRole: "الدور",
+    heroArtworkSuffix: "— عمل فني رئيسي",
+    fullWidthVisual: "صورة عريضة",
+    detailImg1: "تفصيل 01",
+    detailImg2: "تفصيل 02",
+    socialInstagram: "انستغرام",
+    socialBehance: "بيهانس",
+    socialLinkedin: "لينكدإن",
+    dubaiUae: "دبي، الإمارات العربية المتحدة",
+    studioPhoto: "صورة الاستوديو",
+    aboutValues: [
+      { title: "الحرفية قبل الضجيج", text: "نفضل تسليم فكرة واحدة مدروسة على عشر أفكار صاخبة." },
+      { title: "عمل العميل أولاً", text: "لا شيء في هذا الموقع مجرد زينة — كل عنصر موجود ليخدم العمل نفسه." },
+      { title: "رأي صريح", text: "نقول للعملاء رأينا الحقيقي، حتى لو لم يكن ما يتوقعون سماعه." },
+    ],
   },
 };
 
@@ -250,7 +356,7 @@ function unsplashUrl(id, w = 1600) {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 }
 
-function Placeholder({ label, ratio = "56%", tone = 1, fill = false }) {
+function Placeholder({ label, caption, ratio = "56%", tone = 1, fill = false }) {
   const [imgFailed, setImgFailed] = useState(false);
   const seed = hashSeed(label || "ferrum");
   const hue1 = seed % 360;
@@ -337,7 +443,7 @@ function Placeholder({ label, ratio = "56%", tone = 1, fill = false }) {
           color: T.text,
         }}
       >
-        {label}
+        {caption != null ? caption : label}
       </div>
     </div>
   );
@@ -604,11 +710,11 @@ function Footer({ go }) {
           <span style={{ fontSize: 13, color: T.textSec, marginBottom: 4 }}>{t.contact}</span>
           <span style={{ fontSize: 14, color: T.text, direction: "ltr", textAlign: t.brand === "استوديو فيروم" ? "right" : "left" }}>hello@ferrumstudio.co</span>
           <span style={{ fontSize: 14, color: T.text, direction: "ltr", textAlign: t.brand === "استوديو فيروم" ? "right" : "left" }}>+971 4 000 0000</span>
-          <span style={{ fontSize: 14, color: T.textSec }}>Dubai, UAE</span>
+          <span style={{ fontSize: 14, color: T.textSec }}>{t.dubaiUae}</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <span style={{ fontSize: 13, color: T.textSec, marginBottom: 4 }}>{t.social}</span>
-          {["Instagram", "Behance", "LinkedIn"].map((s) => (
+          {[t.socialInstagram, t.socialBehance, t.socialLinkedin].map((s) => (
             <span key={s} style={{ fontSize: 14, color: T.text, cursor: "pointer" }}>{s}</span>
           ))}
         </div>
@@ -623,7 +729,10 @@ function Footer({ go }) {
 /* ---------- PROJECT BLOCK ---------- */
 
 function ProjectBlock({ project, span, onOpen, toneIdx }) {
+  const { lang } = useThemeLang();
   const [hover, setHover] = useState(false);
+  const displayName = pick(project.name, lang);
+  const categoryLabel = CATEGORY_LABELS[lang]?.[project.category] || project.category;
   return (
     <div
       style={{ gridColumn: span, cursor: "pointer" }}
@@ -641,7 +750,7 @@ function ProjectBlock({ project, span, onOpen, toneIdx }) {
         }}
       >
         <div style={{ transform: hover ? "scale(1.045)" : "scale(1)", transition: "transform 650ms cubic-bezier(0.16,1,0.3,1)" }}>
-          <Placeholder label={project.name} tone={toneIdx} ratio={span === "span 12" ? "42%" : "68%"} />
+          <Placeholder label={pick(project.name, "en")} caption="" tone={toneIdx} ratio={span === "span 12" ? "42%" : "68%"} />
         </div>
         <div
           style={{
@@ -658,9 +767,9 @@ function ProjectBlock({ project, span, onOpen, toneIdx }) {
         </div>
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14, fontSize: 13 }}>
-        <span style={{ color: T.text }}>{project.name}</span>
+        <span style={{ color: T.text }}>{displayName}</span>
         <span style={{ display: "flex", gap: 16 }}>
-          <span style={{ color: hover ? T.accent : T.textSec, transition: "color 300ms ease" }}>{project.category}</span>
+          <span style={{ color: hover ? T.accent : T.textSec, transition: "color 300ms ease" }}>{categoryLabel}</span>
           <span style={{ color: T.textSec }}>{project.year}</span>
         </span>
       </div>
@@ -747,7 +856,7 @@ function Home({ go, openProject }) {
           <div style={{ height: "100%", minHeight: 420, padding: "24px 0", paddingInlineEnd: "5vw" }} className="ferrum-hero-image-pad">
             <div style={{ height: "100%", position: "relative" }}>
               <div style={{ position: "absolute", inset: 0 }}>
-                <Placeholder label="Ferrum Studio hero" fill tone={0} />
+                <Placeholder label="Ferrum Studio hero" caption={lang === "ar" ? "استوديو فيروم" : "Ferrum Studio"} fill tone={0} />
               </div>
             </div>
           </div>
@@ -794,7 +903,7 @@ function Home({ go, openProject }) {
         <Reveal><SectionLabel>{t.whatWeDo}</SectionLabel></Reveal>
         <div>
           {SERVICES.slice(0, 6).map((s, i) => (
-            <Reveal key={s.name} delay={i * 40}>
+            <Reveal key={s.id} delay={i * 40}>
               <ServiceRow service={s} onClick={() => go("services")} />
             </Reveal>
           ))}
@@ -815,10 +924,10 @@ function Home({ go, openProject }) {
         <Reveal><SectionLabel>{t.selectedClients}</SectionLabel></Reveal>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "32px 48px" }}>
           {CLIENTS.map((c) => (
-            <span key={c} style={{ fontSize: 15, color: T.textSec, transition: "color 300ms ease", cursor: "default" }}
+            <span key={c.en} style={{ fontSize: 15, color: T.textSec, transition: "color 300ms ease", cursor: "default" }}
               onMouseEnter={(e) => (e.currentTarget.style.color = T.text)}
               onMouseLeave={(e) => (e.currentTarget.style.color = T.textSec)}
-            >{c}</span>
+            >{pick(c, lang)}</span>
           ))}
         </div>
       </section>
@@ -829,6 +938,7 @@ function Home({ go, openProject }) {
 }
 
 function ServiceRow({ service, onClick }) {
+  const { lang } = useThemeLang();
   const [hover, setHover] = useState(false);
   return (
     <div
@@ -842,12 +952,12 @@ function ServiceRow({ service, onClick }) {
         padding: "28px 20px",
         borderTop: `1px solid ${T.border}`,
         cursor: "pointer",
-        background: hover ? "rgba(255,255,255,0.02)" : "transparent",
+        background: hover ? T.accentSoft : "transparent",
         transition: "background 300ms ease",
       }}
     >
-      <span style={{ fontSize: "clamp(22px, 3vw, 32px)", color: hover ? T.accent : T.text, transition: "color 300ms ease" }}>{service.name}</span>
-      <span style={{ fontSize: 14, color: T.textSec, maxWidth: 380, textAlign: "right", display: window.innerWidth < 700 ? "none" : "block" }}>{service.description}</span>
+      <span style={{ fontSize: "clamp(22px, 3vw, 32px)", color: hover ? T.accent : T.text, transition: "color 300ms ease" }}>{pick(service.name, lang)}</span>
+      <span style={{ fontSize: 14, color: T.textSec, maxWidth: 380, textAlign: "right", display: window.innerWidth < 700 ? "none" : "block" }}>{pick(service.description, lang)}</span>
     </div>
   );
 }
@@ -882,7 +992,7 @@ function Work({ go, openProject }) {
                   paddingBottom: 4,
                 }}
               >
-                {f}
+                {CATEGORY_LABELS[lang]?.[f] || f}
               </span>
             ))}
           </div>
@@ -913,33 +1023,41 @@ function Work({ go, openProject }) {
 /* ---------- PROJECT DETAIL PAGE ---------- */
 
 function ProjectDetail({ project, go, next, openProject }) {
-  const { t } = useThemeLang();
+  const { t, lang } = useThemeLang();
   if (!project) return null;
+  const name = pick(project.name, lang);
+  const nextName = next ? pick(next.name, lang) : null;
+  const categoryLabel = CATEGORY_LABELS[lang]?.[project.category] || project.category;
   return (
     <>
       <section style={{ padding: "160px 5vw 48px" }}>
         <Reveal>
           <div style={{ display: "flex", gap: 24, fontSize: 13, color: T.textSec, marginBottom: 20 }}>
-            <span>{project.category}</span>
-            <span>{project.client}</span>
+            <span>{categoryLabel}</span>
+            <span>{pick(project.client, lang)}</span>
             <span>{project.year}</span>
           </div>
-          <h1 style={{ fontSize: "clamp(36px, 6vw, 84px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.02em" }}>{project.name}</h1>
+          <h1 style={{ fontSize: "clamp(36px, 6vw, 84px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.02em" }}>{name}</h1>
         </Reveal>
       </section>
 
       <section style={{ padding: "0 5vw 96px" }}>
-        <Reveal><Placeholder label={`${project.name} — hero artwork`} ratio="52%" tone={1} /></Reveal>
+        <Reveal><Placeholder label={`${pick(project.name, "en")} ${t.heroArtworkSuffix}`} ratio="52%" tone={1} /></Reveal>
       </section>
 
       <section style={{ padding: "0 5vw 96px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: 64 }} className="ferrum-detail-grid">
         <Reveal>
           <SectionLabel>{t.overview}</SectionLabel>
-          <p style={{ fontSize: 20, lineHeight: 1.6, color: T.text, maxWidth: 620 }}>{project.overview}</p>
+          <p style={{ fontSize: 20, lineHeight: 1.6, color: T.text, maxWidth: 620 }}>{pick(project.overview, lang)}</p>
         </Reveal>
         <Reveal delay={100}>
           <div style={{ display: "flex", flexDirection: "column", gap: 16, borderTop: `1px solid ${T.border}`, paddingTop: 20 }}>
-            {[["Client", project.client], ["Year", project.year], ["Category", project.category], ["Role", project.role]].map(([k, v]) => (
+            {[
+              [t.fieldClient, pick(project.client, lang)],
+              [t.fieldYear, project.year],
+              [t.fieldCategory, categoryLabel],
+              [t.fieldRole, pick(project.role, lang)],
+            ].map(([k, v]) => (
               <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: 14 }}>
                 <span style={{ color: T.textSec }}>{k}</span>
                 <span style={{ color: T.text, textAlign: "right", maxWidth: 220 }}>{v}</span>
@@ -952,29 +1070,29 @@ function ProjectDetail({ project, go, next, openProject }) {
       <section style={{ padding: "0 5vw 96px", maxWidth: 720 }}>
         <Reveal>
           <SectionLabel>{t.concept}</SectionLabel>
-          <p style={{ fontSize: 20, lineHeight: 1.7, color: T.text }}>{project.concept}</p>
+          <p style={{ fontSize: 20, lineHeight: 1.7, color: T.text }}>{pick(project.concept, lang)}</p>
         </Reveal>
       </section>
 
       <section style={{ padding: "0 5vw 32px" }}>
-        <Reveal><Placeholder label="Full-width visual" ratio="46%" tone={2} /></Reveal>
+        <Reveal><Placeholder label={t.fullWidthVisual} ratio="46%" tone={2} /></Reveal>
       </section>
       <section style={{ padding: "0 5vw 96px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }} className="ferrum-detail-grid">
-        <Reveal><Placeholder label="Detail 01" ratio="80%" tone={0} /></Reveal>
-        <Reveal delay={80}><Placeholder label="Detail 02" ratio="80%" tone={1} /></Reveal>
+        <Reveal><Placeholder label={t.detailImg1} ratio="80%" tone={0} /></Reveal>
+        <Reveal delay={80}><Placeholder label={t.detailImg2} ratio="80%" tone={1} /></Reveal>
       </section>
 
       <section style={{ padding: "0 5vw 128px", maxWidth: 720 }}>
         <Reveal>
           <SectionLabel>{t.outcome}</SectionLabel>
-          <p style={{ fontSize: 22, lineHeight: 1.5, color: T.text }}>{project.results}</p>
+          <p style={{ fontSize: 22, lineHeight: 1.5, color: T.text }}>{pick(project.results, lang)}</p>
         </Reveal>
       </section>
 
       {next && (
         <div onClick={() => openProject(next)} style={{ cursor: "pointer", borderTop: `1px solid ${T.border}`, padding: "64px 5vw", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: 13, color: T.textSec }}>{t.nextProject}</span>
-          <span style={{ fontSize: "clamp(24px,4vw,48px)", color: T.text }}>{next.name}</span>
+          <span style={{ fontSize: "clamp(24px,4vw,48px)", color: T.text }}>{nextName}</span>
         </div>
       )}
 
@@ -1004,16 +1122,16 @@ function ServicesPage({ go }) {
       </section>
 
       {SERVICES.map((s, i) => (
-        <section key={s.name} style={{ padding: "64px 5vw", borderTop: `1px solid ${T.border}`, display: "grid", gridTemplateColumns: i % 2 === 0 ? "1fr 1fr" : "1fr 1fr", gap: 48 }} className="ferrum-service-grid">
+        <section key={s.id} style={{ padding: "64px 5vw", borderTop: `1px solid ${T.border}`, display: "grid", gridTemplateColumns: i % 2 === 0 ? "1fr 1fr" : "1fr 1fr", gap: 48 }} className="ferrum-service-grid">
           {i % 2 === 0 ? (
             <>
-              <Reveal><Placeholder label={s.name} ratio="70%" tone={i} /></Reveal>
+              <Reveal><Placeholder label={s.id} caption={pick(s.name, lang)} ratio="70%" tone={i} /></Reveal>
               <Reveal delay={100}><ServiceDetail s={s} /></Reveal>
             </>
           ) : (
             <>
               <Reveal className="ferrum-order-2"><ServiceDetail s={s} /></Reveal>
-              <Reveal delay={100} className="ferrum-order-1"><Placeholder label={s.name} ratio="70%" tone={i} /></Reveal>
+              <Reveal delay={100} className="ferrum-order-1"><Placeholder label={s.id} caption={pick(s.name, lang)} ratio="70%" tone={i} /></Reveal>
             </>
           )}
         </section>
@@ -1031,12 +1149,13 @@ function ServicesPage({ go }) {
 }
 
 function ServiceDetail({ s }) {
+  const { lang } = useThemeLang();
   return (
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", gap: 20 }}>
-      <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 500, color: T.text, margin: 0 }}>{s.name}</h2>
-      <p style={{ fontSize: 16, color: T.textSec, lineHeight: 1.6, maxWidth: 420 }}>{s.description}</p>
+      <h2 style={{ fontSize: "clamp(28px, 3.5vw, 44px)", fontWeight: 500, color: T.text, margin: 0 }}>{pick(s.name, lang)}</h2>
+      <p style={{ fontSize: 16, color: T.textSec, lineHeight: 1.6, maxWidth: 420 }}>{pick(s.description, lang)}</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 8 }}>
-        {s.capabilities.map((c) => (
+        {pick(s.capabilities, lang).map((c) => (
           <div key={c} style={{ fontSize: 14, color: T.text, borderTop: `1px solid ${T.border}`, paddingTop: 8 }}>{c}</div>
         ))}
       </div>
@@ -1049,11 +1168,7 @@ function ServiceDetail({ s }) {
 function About({ go }) {
   const { t, lang } = useThemeLang();
   const displayFont = lang === "ar" ? "'Markazi Text', 'Tajawal', serif" : "'Fraunces', 'Inter', serif";
-  const values = [
-    { title: "Craft over noise", text: "We'd rather ship one considered idea than ten loud ones." },
-    { title: "Client work first", text: "Nothing on this site is decoration for its own sake — it exists to sell the work." },
-    { title: "Direct feedback", text: "We tell clients what we actually think, even when it's not what they expected to hear." },
-  ];
+  const values = t.aboutValues;
   return (
     <>
       <section style={{ padding: "160px 5vw 80px" }}>
@@ -1065,7 +1180,7 @@ function About({ go }) {
       </section>
 
       <section style={{ padding: "0 5vw 96px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }} className="ferrum-detail-grid">
-        <Reveal><Placeholder label="Studio photograph" ratio="110%" tone={1} /></Reveal>
+        <Reveal><Placeholder label="Studio photograph" caption={t.studioPhoto} ratio="110%" tone={1} /></Reveal>
         <Reveal delay={100}>
           <SectionLabel>{t.ourStory}</SectionLabel>
           <p style={{ fontSize: 18, lineHeight: 1.7, color: T.text }}>
@@ -1176,7 +1291,7 @@ function Contact() {
             <div>
               <div style={labelStyle}>{t.projectType}</div>
               <select style={{ ...fieldStyle, appearance: "none" }} value={form.type} onChange={set("type")}>
-                {SERVICES.map((s) => (<option key={s.name} style={{ background: T.bg }}>{s.name}</option>))}
+                {SERVICES.map((s) => (<option key={s.id} value={s.id} style={{ background: T.bg }}>{pick(s.name, lang)}</option>))}
               </select>
             </div>
             <div>
@@ -1197,7 +1312,7 @@ function Contact() {
             [t.email, "hello@ferrumstudio.co"],
             [t.phone, "+971 4 000 0000"],
             [t.whatsapp, "+971 50 000 0000"],
-            [t.location, "Dubai, UAE"],
+            [t.location, t.dubaiUae],
           ].map(([k, v]) => (
             <div key={k}>
               <div style={{ fontSize: 12, color: T.textSec, marginBottom: 4 }}>{k}</div>
@@ -1205,7 +1320,7 @@ function Contact() {
             </div>
           ))}
           <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
-            {["Instagram", "Behance", "LinkedIn"].map((s) => (
+            {[t.socialInstagram, t.socialBehance, t.socialLinkedin].map((s) => (
               <span key={s} style={{ fontSize: 14, color: T.textSec, cursor: "pointer" }}>{s}</span>
             ))}
           </div>
