@@ -247,7 +247,7 @@ function unsplashUrl(id, w = 1600) {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 }
 
-function Placeholder({ label, ratio = "56%", tone = 1 }) {
+function Placeholder({ label, ratio = "56%", tone = 1, fill = false }) {
   const [imgFailed, setImgFailed] = useState(false);
   const seed = hashSeed(label || "ferrum");
   const hue1 = seed % 360;
@@ -265,7 +265,8 @@ function Placeholder({ label, ratio = "56%", tone = 1 }) {
     <div
       style={{
         width: "100%",
-        paddingTop: ratio,
+        height: fill ? "100%" : undefined,
+        paddingTop: fill ? undefined : ratio,
         position: "relative",
         background: "var(--fs-surface)",
         overflow: "hidden",
@@ -556,12 +557,13 @@ function Nav({ page, go }) {
 /* ---------- FOOTER + CTA (shared across pages) ---------- */
 
 function ClosingCTA({ go }) {
-  const { t } = useThemeLang();
+  const { t, lang } = useThemeLang();
+  const displayFont = lang === "ar" ? "'Markazi Text', 'Tajawal', serif" : "'Fraunces', 'Inter', serif";
   return (
     <section style={{ padding: "160px 5vw", textAlign: "center", borderTop: `1px solid ${T.border}` }}>
       <Reveal>
         <SectionLabel>{t.getInTouch}</SectionLabel>
-        <h2 style={{ fontSize: "clamp(36px, 6vw, 88px)", fontWeight: 500, letterSpacing: "-0.02em", margin: "0 0 40px", color: T.text, lineHeight: 1.05 }}>
+        <h2 style={{ fontFamily: displayFont, fontSize: "clamp(36px, 6vw, 88px)", fontWeight: 500, letterSpacing: "-0.02em", margin: "0 0 40px", color: T.text, lineHeight: 1.05 }}>
           {t.haveProject}
         </h2>
         <Button variant="cta" onClick={() => go("contact")}>{t.letsWork}</Button>
@@ -625,9 +627,29 @@ function ProjectBlock({ project, span, onOpen, toneIdx }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <div style={{ overflow: "hidden" }}>
+      <div
+        style={{
+          overflow: "hidden",
+          position: "relative",
+          boxShadow: hover ? "0 24px 48px -24px rgba(0,0,0,0.5)" : "0 0 0 rgba(0,0,0,0)",
+          transition: "box-shadow 500ms ease",
+        }}
+      >
         <div style={{ transform: hover ? "scale(1.045)" : "scale(1)", transition: "transform 650ms cubic-bezier(0.16,1,0.3,1)" }}>
           <Placeholder label={project.name} tone={toneIdx} ratio={span === "span 12" ? "42%" : "68%"} />
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            top: 14,
+            insetInlineStart: 14,
+            fontSize: 12,
+            color: T.text,
+            opacity: hover ? 1 : 0.7,
+            transition: "opacity 300ms ease",
+          }}
+        >
+          {String(toneIdx + 1).padStart(2, "0")}
         </div>
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14, fontSize: 13 }}>
@@ -643,45 +665,103 @@ function ProjectBlock({ project, span, onOpen, toneIdx }) {
 
 /* ---------- HOME PAGE ---------- */
 
+function Marquee({ items }) {
+  const { lang } = useThemeLang();
+  const loopItems = [...items, ...items];
+  return (
+    <div style={{ borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`, overflow: "hidden", padding: "22px 0" }}>
+      <div
+        className="fs-marquee-track"
+        style={{
+          display: "flex",
+          width: "max-content",
+          gap: 48,
+          animation: "fs-marquee 26s linear infinite",
+        }}
+      >
+        {loopItems.map((label, i) => (
+          <span key={i} style={{ display: "flex", alignItems: "center", gap: 48, fontSize: 15, color: T.textSec, whiteSpace: "nowrap" }}>
+            {label}
+            <span style={{ color: T.accent, fontSize: 10 }}>◆</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Home({ go, openProject }) {
-  const { t } = useThemeLang();
+  const { t, lang } = useThemeLang();
   const featured = PROJECTS.slice(0, 4);
   const spans = ["span 8", "span 4", "span 12", "span 6"];
-  const seconds = ["span 4", "span 8", null, "span 6"];
+  const displayFont = lang === "ar" ? "'Markazi Text', 'Tajawal', serif" : "'Fraunces', 'Inter', serif";
 
   return (
     <>
-      {/* HERO */}
-      <section style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "120px 5vw 96px", position: "relative" }}>
-        <div style={{ position: "absolute", inset: 0, zIndex: -1 }}>
-          <Placeholder label="Ferrum Studio hero" ratio="100%" tone={0} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, var(--fs-bg) 8%, rgba(10,10,10,0.15) 65%)" }} />
-        </div>
-        <Reveal>
-          <div style={{ fontSize: 13, color: T.accent, letterSpacing: "0.02em", marginBottom: 20 }}>
-            {t.brand === "استوديو فيروم" ? "دبي · استوديو إبداعي" : "Dubai · Creative Studio"}
-          </div>
-        </Reveal>
-        <Reveal delay={80}>
-          <h1 style={{ fontSize: "clamp(38px, 8.5vw, 140px)", fontWeight: 600, letterSpacing: "-0.02em", lineHeight: 1.05, margin: "0 0 32px", color: T.text, maxWidth: 1100 }}>
-            {t.heroHeadline}
-          </h1>
-        </Reveal>
-        <Reveal delay={180}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24 }}>
-            <p style={{ fontSize: 18, color: T.textSec, maxWidth: 420, margin: 0, lineHeight: 1.7 }}>
+      {/* HERO — split editorial layout */}
+      <section
+        style={{
+          minHeight: "94vh",
+          display: "grid",
+          gridTemplateColumns: "1.15fr 0.85fr",
+          alignItems: "stretch",
+          padding: "112px 0 0",
+        }}
+        className="ferrum-hero-grid"
+      >
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "48px 5vw 64px" }}>
+          <Reveal>
+            <div style={{ fontSize: 13, color: T.accent, letterSpacing: "0.02em", marginBottom: 24 }}>
+              {lang === "ar" ? "دبي · استوديو إبداعي · تأسس ٢٠١٩" : "Dubai · Creative Studio · Est. 2019"}
+            </div>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1
+              style={{
+                fontFamily: displayFont,
+                fontSize: "clamp(38px, 6vw, 84px)",
+                fontWeight: lang === "ar" ? 700 : 500,
+                letterSpacing: "-0.01em",
+                lineHeight: 1.08,
+                margin: "0 0 32px",
+                color: T.text,
+                maxWidth: 620,
+              }}
+            >
+              {t.heroHeadline}
+            </h1>
+          </Reveal>
+          <Reveal delay={160}>
+            <p style={{ fontSize: 18, color: T.textSec, maxWidth: 420, margin: "0 0 40px", lineHeight: 1.7 }}>
               {t.heroSub}
             </p>
             <Button variant="cta" onClick={() => go("work")}>{t.heroCta}</Button>
+          </Reveal>
+        </div>
+        <Reveal delay={100} style={{ height: "100%" }}>
+          <div style={{ height: "100%", minHeight: 420 }}>
+            <div style={{ height: "100%", position: "relative" }}>
+              <div style={{ position: "absolute", inset: 0 }}>
+                <Placeholder label="Ferrum Studio hero" fill tone={0} />
+              </div>
+            </div>
           </div>
         </Reveal>
       </section>
 
+      <Marquee
+        items={
+          lang === "ar"
+            ? ["الهوية البصرية", "التصميم ثلاثي الأبعاد", "الإعلان", "الجرافيك", "الموشن", "التصوير", "الإنتاج المرئي"]
+            : ["Branding", "3D Design", "Advertising", "Graphic Design", "Motion", "Photography", "Video Production"]
+        }
+      />
+
       {/* INTRO */}
-      <section style={{ padding: "128px 5vw", maxWidth: 780 }}>
-        <Reveal>
-          <SectionLabel>{t.whoWeAre}</SectionLabel>
-          <p style={{ fontSize: "clamp(22px, 3vw, 34px)", lineHeight: 1.4, color: T.text, fontWeight: 400 }}>
+      <section style={{ padding: "128px 5vw", display: "grid", gridTemplateColumns: "1fr 2fr", gap: 40 }} className="ferrum-detail-grid">
+        <Reveal><SectionLabel>{t.whoWeAre}</SectionLabel></Reveal>
+        <Reveal delay={80}>
+          <p style={{ fontSize: "clamp(22px, 3vw, 34px)", lineHeight: 1.5, color: T.text, fontWeight: 400, maxWidth: 780 }}>
             {t.introText}
           </p>
         </Reveal>
@@ -691,7 +771,7 @@ function Home({ go, openProject }) {
       <section style={{ padding: "0 5vw 128px" }}>
         <Reveal>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 40 }}>
-            <h2 style={{ fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.01em" }}>{t.selectedWork}</h2>
+            <h2 style={{ fontFamily: displayFont, fontSize: "clamp(32px, 4vw, 56px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.01em" }}>{t.selectedWork}</h2>
             <span onClick={() => go("work")} style={{ cursor: "pointer", fontSize: 14, color: T.textSec, borderBottom: `1px solid ${T.border}` }}>{t.viewAll}</span>
           </div>
         </Reveal>
@@ -770,7 +850,8 @@ function ServiceRow({ service, onClick }) {
 /* ---------- WORK PAGE ---------- */
 
 function Work({ go, openProject }) {
-  const { t } = useThemeLang();
+  const { t, lang } = useThemeLang();
+  const displayFont = lang === "ar" ? "'Markazi Text', 'Tajawal', serif" : "'Fraunces', 'Inter', serif";
   const [filter, setFilter] = useState("All");
   const filtered = filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
   const spanFor = (size) => (size === "large" ? "span 8" : size === "full" ? "span 12" : size === "medium" ? "span 6" : "span 4");
@@ -779,7 +860,7 @@ function Work({ go, openProject }) {
     <>
       <section style={{ padding: "160px 5vw 48px" }}>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(40px, 6vw, 88px)", fontWeight: 500, color: T.text, margin: "0 0 40px", letterSpacing: "-0.02em" }}>{t.workTitle}</h1>
+          <h1 style={{ fontFamily: displayFont, fontSize: "clamp(40px, 6vw, 88px)", fontWeight: 500, color: T.text, margin: "0 0 40px", letterSpacing: "-0.02em" }}>{t.workTitle}</h1>
         </Reveal>
         <Reveal delay={100}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 24, borderBottom: `1px solid ${T.border}`, paddingBottom: 24, overflowX: "auto" }}>
@@ -906,12 +987,13 @@ function ProjectDetail({ project, go, next, openProject }) {
 /* ---------- SERVICES PAGE ---------- */
 
 function ServicesPage({ go }) {
-  const { t } = useThemeLang();
+  const { t, lang } = useThemeLang();
+  const displayFont = lang === "ar" ? "'Markazi Text', 'Tajawal', serif" : "'Fraunces', 'Inter', serif";
   return (
     <>
       <section style={{ padding: "160px 5vw 80px" }}>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(40px, 6vw, 88px)", fontWeight: 500, color: T.text, margin: "0 0 20px", letterSpacing: "-0.02em" }}>{t.servicesTitle}</h1>
+          <h1 style={{ fontFamily: displayFont, fontSize: "clamp(40px, 6vw, 88px)", fontWeight: 500, color: T.text, margin: "0 0 20px", letterSpacing: "-0.02em" }}>{t.servicesTitle}</h1>
           <p style={{ fontSize: 18, color: T.textSec, maxWidth: 520 }}>{t.servicesSub}</p>
         </Reveal>
       </section>
@@ -960,7 +1042,8 @@ function ServiceDetail({ s }) {
 /* ---------- ABOUT PAGE ---------- */
 
 function About({ go }) {
-  const { t } = useThemeLang();
+  const { t, lang } = useThemeLang();
+  const displayFont = lang === "ar" ? "'Markazi Text', 'Tajawal', serif" : "'Fraunces', 'Inter', serif";
   const values = [
     { title: "Craft over noise", text: "We'd rather ship one considered idea than ten loud ones." },
     { title: "Client work first", text: "Nothing on this site is decoration for its own sake — it exists to sell the work." },
@@ -970,7 +1053,7 @@ function About({ go }) {
     <>
       <section style={{ padding: "160px 5vw 80px" }}>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(36px, 6vw, 80px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.02em", maxWidth: 900 }}>
+          <h1 style={{ fontFamily: displayFont, fontSize: "clamp(36px, 6vw, 80px)", fontWeight: 500, color: T.text, margin: 0, letterSpacing: "-0.02em", maxWidth: 900 }}>
             {t.aboutHeadline}
           </h1>
         </Reveal>
@@ -1011,7 +1094,8 @@ function About({ go }) {
 /* ---------- CONTACT PAGE ---------- */
 
 function Contact() {
-  const { t } = useThemeLang();
+  const { t, lang } = useThemeLang();
+  const displayFont = lang === "ar" ? "'Markazi Text', 'Tajawal', serif" : "'Fraunces', 'Inter', serif";
   const [form, setForm] = useState({ name: "", email: "", phone: "", company: "", type: "Branding", message: "" });
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
@@ -1056,7 +1140,7 @@ function Contact() {
     <section style={{ padding: "160px 5vw 128px", display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 80 }} className="ferrum-contact-grid">
       <div>
         <Reveal>
-          <h1 style={{ fontSize: "clamp(36px, 6vw, 76px)", fontWeight: 500, color: T.text, margin: "0 0 48px", letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontFamily: displayFont, fontSize: "clamp(36px, 6vw, 76px)", fontWeight: 500, color: T.text, margin: "0 0 48px", letterSpacing: "-0.02em" }}>
             {t.letsTalk}
           </h1>
         </Reveal>
@@ -1194,6 +1278,12 @@ export default function App() {
         [dir="rtl"] .ferrum-detail-grid,
         [dir="rtl"] .ferrum-contact-grid { direction: rtl; }
         input, textarea, select { direction: inherit; }
+        @keyframes fs-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        [dir="rtl"] .fs-marquee-track { animation-direction: reverse; }
+        @media (max-width: 900px) {
+          .ferrum-hero-grid { grid-template-columns: 1fr !important; }
+          .ferrum-hero-grid > div:last-child { min-height: 320px !important; order: -1; }
+        }
       `}</style>
       <div
         dir={lang === "ar" ? "rtl" : "ltr"}
@@ -1204,9 +1294,23 @@ export default function App() {
             ? "'Tajawal', 'Segoe UI', 'Inter', sans-serif"
             : "'Inter', 'Helvetica Neue', Arial, sans-serif",
           minHeight: "100vh",
+          position: "relative",
           transition: "background 300ms ease, color 300ms ease",
         }}
       >
+        <div
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            inset: 0,
+            pointerEvents: "none",
+            zIndex: 200,
+            opacity: 0.035,
+            mixBlendMode: "overlay",
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+          }}
+        />
         <Nav page={page} go={go} />
         {page === "home" && <Home go={go} openProject={openProject} />}
         {page === "work" && <Work go={go} openProject={openProject} />}
