@@ -356,7 +356,7 @@ function unsplashUrl(id, w = 1600) {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 }
 
-function Placeholder({ label, caption, ratio = "56%", tone = 1, fill = false }) {
+function Placeholder({ label, caption, ratio = "56%", tone = 1, fill = false, radius }) {
   const [imgFailed, setImgFailed] = useState(false);
   const seed = hashSeed(label || "ferrum");
   const hue1 = seed % 360;
@@ -379,7 +379,7 @@ function Placeholder({ label, caption, ratio = "56%", tone = 1, fill = false }) 
         position: "relative",
         background: "var(--fs-surface)",
         overflow: "hidden",
-        borderRadius: T.radius,
+        borderRadius: radius !== undefined ? radius : T.radius,
       }}
     >
       <svg
@@ -815,26 +815,20 @@ function ProjectListRow({ project, index, onOpen }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 24,
-        padding: "20px 4px",
-        borderTop: `1px solid ${T.border}`,
         cursor: "pointer",
-        background: hover ? T.accentSoft : "transparent",
-        transition: "background 300ms ease",
+        padding: "40px 0",
+        borderTop: `1px solid ${T.border}`,
       }}
-      className="ferrum-list-row"
     >
-      <div style={{ fontSize: 13, color: T.textSec, width: 28, flexShrink: 0 }}>{String(index + 1).padStart(2, "0")}</div>
-      <div style={{ width: 96, height: 64, flexShrink: 0, borderRadius: 12, overflow: "hidden" }} className="ferrum-list-thumb">
-        <Placeholder label={pick(project.name, "en")} caption="" fill />
+      <div style={{ marginInline: "-5vw", overflow: "hidden" }}>
+        <div style={{ transform: hover ? "scale(1.02)" : "scale(1)", transition: "transform 600ms cubic-bezier(0.16,1,0.3,1)" }}>
+          <Placeholder label={pick(project.name, "en")} caption="" ratio="46%" radius={0} />
+        </div>
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: "clamp(17px, 2vw, 22px)", color: hover ? T.accent : T.text, transition: "color 300ms ease", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 20, gap: 16, flexWrap: "wrap" }}>
+        <div style={{ fontSize: "clamp(22px, 3vw, 34px)", color: hover ? T.accent : T.text, transition: "color 300ms ease" }}>{name}</div>
+        <div style={{ fontSize: 13, color: T.textSec, whiteSpace: "nowrap" }}>{categoryLabel} · {project.year}</div>
       </div>
-      <div style={{ fontSize: 13, color: T.textSec, flexShrink: 0 }} className="ferrum-list-category">{categoryLabel}</div>
-      <div style={{ fontSize: 13, color: T.textSec, flexShrink: 0, width: 44, textAlign: "end" }}>{project.year}</div>
     </div>
   );
 }
