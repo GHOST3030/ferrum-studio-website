@@ -34,6 +34,7 @@ const T = {
   text: "var(--fs-text)",
   textSec: "var(--fs-text-sec)",
   accent: "var(--fs-accent)",
+  accentSoft: "var(--fs-accent-soft)",
   border: "var(--fs-border)",
 };
 
@@ -41,20 +42,22 @@ const T = {
 
 const THEME_VARS = `
   :root[data-fs-theme="dark"] {
-    --fs-bg: #0A0A0A;
-    --fs-surface: #161616;
-    --fs-text: #F5F5F0;
-    --fs-text-sec: #8A8A8A;
-    --fs-accent: #C7FF2F;
-    --fs-border: #292929;
+    --fs-bg: #0C0B09;
+    --fs-surface: #17150F;
+    --fs-text: #F4F0E6;
+    --fs-text-sec: #9C9484;
+    --fs-accent: #D6A756;
+    --fs-accent-soft: rgba(214,167,86,0.14);
+    --fs-border: #2A271F;
   }
   :root[data-fs-theme="light"] {
-    --fs-bg: #F7F6F2;
-    --fs-surface: #EDEBE4;
-    --fs-text: #0A0A0A;
-    --fs-text-sec: #6B6B63;
-    --fs-accent: #6B7A00;
-    --fs-border: #D8D5CB;
+    --fs-bg: #FAF7F0;
+    --fs-surface: #F0EBDD;
+    --fs-text: #16140F;
+    --fs-text-sec: #6E6656;
+    --fs-accent: #9C7222;
+    --fs-accent-soft: rgba(156,114,34,0.12);
+    --fs-border: #DFD8C4;
   }
 `;
 
@@ -214,7 +217,38 @@ function hashSeed(str) {
   return Math.abs(h);
 }
 
+const IMG_MAP = {
+  "Aurora Skincare": "1522335789203-aabd1fc54bc9",
+  "Monolith": "1618005182384-a83a8bd57fbe",
+  "Veyra Airlines": "1436491865332-7a61a109cc05",
+  "Nomad Coffee": "1495474472287-4d71bcdd2085",
+  "Pulse": "1571019613454-1cb2f99b2d8b",
+  "Sable House": "1566073771259-6a8506099945",
+  "Kite Social": "1611162617213-7d7a39e9b1d7",
+  "Ferrum Studio hero": "1517245386807-bb43f82c33c4",
+  "Studio photograph": "1523726491678-bf852e717f6a",
+  "Branding": "1611162616305-c69b3fa7fbe0",
+  "3D Design": "1618005182384-a83a8bd57fbe",
+  "Advertising": "1557838923-2985c318be48",
+  "Graphic Design": "1626785774573-4b799315345d",
+  "Motion": "1550684848-fac1c5b4e853",
+  "Photography": "1516035069371-29a1b244cc32",
+  "Video Production": "1492619375914-88005aa9e8fb",
+};
+
+const FALLBACK_IMGS = [
+  "1550745165-9bc0b252726f",
+  "1620121692029-d088224ddc74",
+  "1620641788421-7a1c342ea42e",
+  "1487958449943-2429e8be8625",
+];
+
+function unsplashUrl(id, w = 1600) {
+  return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
+}
+
 function Placeholder({ label, ratio = "56%", tone = 1 }) {
+  const [imgFailed, setImgFailed] = useState(false);
   const seed = hashSeed(label || "ferrum");
   const hue1 = seed % 360;
   const hue2 = (hue1 + 40 + (seed % 60)) % 360;
@@ -223,6 +257,9 @@ function Placeholder({ label, ratio = "56%", tone = 1 }) {
   const cy = 20 + ((seed >> 3) % 60);
   const r1 = 30 + (seed % 25);
   const r2 = 20 + ((seed >> 4) % 20);
+
+  const photoId = IMG_MAP[label] || FALLBACK_IMGS[seed % FALLBACK_IMGS.length];
+  const imgSrc = unsplashUrl(photoId);
 
   return (
     <div
@@ -245,8 +282,8 @@ function Placeholder({ label, ratio = "56%", tone = 1 }) {
             <stop offset="100%" stopColor={`hsl(${hue2}, 14%, 4%)`} />
           </linearGradient>
           <radialGradient id={`r1-${seed}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(199,255,47,0.16)" />
-            <stop offset="100%" stopColor="rgba(199,255,47,0)" />
+            <stop offset="0%" style={{ stopColor: "var(--fs-accent)", stopOpacity: 0.18 }} />
+            <stop offset="100%" style={{ stopColor: "var(--fs-accent)", stopOpacity: 0 }} />
           </radialGradient>
           <radialGradient id={`r2-${seed}`} cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor={`hsla(${hue1}, 60%, 55%, 0.14)`} />
@@ -259,6 +296,22 @@ function Placeholder({ label, ratio = "56%", tone = 1 }) {
         <line x1="0" y1={cy} x2="100" y2={cy - 12} stroke="rgba(245,245,240,0.06)" strokeWidth="0.3" />
         <line x1={cx} y1="0" x2={cx + 10} y2="100" stroke="rgba(245,245,240,0.05)" strokeWidth="0.3" />
       </svg>
+      {!imgFailed && (
+        <img
+          src={imgSrc}
+          alt={label}
+          loading="lazy"
+          onError={() => setImgFailed(true)}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            filter: "grayscale(0.35) contrast(1.06) brightness(0.82)",
+          }}
+        />
+      )}
       <div
         style={{
           position: "absolute",
@@ -310,7 +363,7 @@ function Button({ children, variant = "primary", onClick, style = {} }) {
   } else {
     base.borderColor = hover ? T.accent : T.text;
     base.color = hover ? T.accent : T.text;
-    base.background = hover ? "rgba(199,255,47,0.08)" : "transparent";
+    base.background = hover ? "var(--fs-accent-soft)" : "transparent";
   }
   return (
     <button
@@ -376,7 +429,7 @@ function ToggleChip({ label, active, onClick, title }) {
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        background: active || hover ? "rgba(199,255,47,0.08)" : "transparent",
+        background: active || hover ? "var(--fs-accent-soft)" : "transparent",
         transition: "all 250ms ease",
       }}
     >
