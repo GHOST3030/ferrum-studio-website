@@ -804,12 +804,45 @@ function Marquee({ items }) {
   );
 }
 
+function ProjectListRow({ project, index, onOpen }) {
+  const { lang } = useThemeLang();
+  const [hover, setHover] = useState(false);
+  const name = pick(project.name, lang);
+  const categoryLabel = CATEGORY_LABELS[lang]?.[project.category] || project.category;
+  return (
+    <div
+      onClick={() => onOpen(project)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 24,
+        padding: "20px 4px",
+        borderTop: `1px solid ${T.border}`,
+        cursor: "pointer",
+        background: hover ? T.accentSoft : "transparent",
+        transition: "background 300ms ease",
+      }}
+      className="ferrum-list-row"
+    >
+      <div style={{ fontSize: 13, color: T.textSec, width: 28, flexShrink: 0 }}>{String(index + 1).padStart(2, "0")}</div>
+      <div style={{ width: 96, height: 64, flexShrink: 0, borderRadius: 12, overflow: "hidden" }} className="ferrum-list-thumb">
+        <Placeholder label={pick(project.name, "en")} caption="" fill />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: "clamp(17px, 2vw, 22px)", color: hover ? T.accent : T.text, transition: "color 300ms ease", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</div>
+      </div>
+      <div style={{ fontSize: 13, color: T.textSec, flexShrink: 0 }} className="ferrum-list-category">{categoryLabel}</div>
+      <div style={{ fontSize: 13, color: T.textSec, flexShrink: 0, width: 44, textAlign: "end" }}>{project.year}</div>
+    </div>
+  );
+}
+
 function FeaturedWork({ go, openProject, displayFont }) {
   const { t, lang } = useThemeLang();
   const [filter, setFilter] = useState("featured");
   const featuredDefault = PROJECTS.slice(0, 4);
-  const featuredSpans = ["span 8", "span 4", "span 12", "span 6"];
-  const spanFor = (size) => (size === "large" ? "span 8" : size === "full" ? "span 12" : size === "medium" ? "span 6" : "span 4");
 
   const list = filter === "featured" ? featuredDefault : filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter);
   const tabs = ["featured", ...FILTERS];
@@ -823,7 +856,7 @@ function FeaturedWork({ go, openProject, displayFont }) {
         </div>
       </Reveal>
       <Reveal delay={60}>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 40, overflowX: "auto" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 32, overflowX: "auto" }}>
           {tabs.map((f) => {
             const label = f === "featured" ? t.selectedWork : (CATEGORY_LABELS[lang]?.[f] || f);
             const active = filter === f;
@@ -849,18 +882,18 @@ function FeaturedWork({ go, openProject, displayFont }) {
           })}
         </div>
       </Reveal>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: 24 }}>
+      <div>
         {list.length === 0 ? (
-          <div style={{ gridColumn: "span 12", padding: "60px 0", textAlign: "center", color: T.textSec, fontSize: 14 }}>{t.noProjects}</div>
+          <div style={{ padding: "60px 0", textAlign: "center", color: T.textSec, fontSize: 14 }}>{t.noProjects}</div>
         ) : (
-          list.map((p, i) => {
-            const span = filter === "featured" ? featuredSpans[i] : spanFor(p.size);
-            return (
-              <Reveal key={p.id} delay={(i % 8) * 60} style={{ gridColumn: span }}>
-                <ProjectBlock project={p} span={span} onOpen={openProject} toneIdx={i} />
+          <>
+            {list.map((p, i) => (
+              <Reveal key={p.id} delay={(i % 8) * 50}>
+                <ProjectListRow project={p} index={i} onOpen={openProject} />
               </Reveal>
-            );
-          })
+            ))}
+            <div style={{ borderTop: `1px solid ${T.border}` }} />
+          </>
         )}
       </div>
     </section>
@@ -1450,6 +1483,9 @@ export default function App() {
         @media (max-width: 900px) {
           .ferrum-hero-grid { grid-template-columns: 1fr !important; }
           .ferrum-hero-grid > div:last-child { min-height: 320px !important; order: -1; }
+        }
+        @media (max-width: 640px) {
+          .ferrum-list-category { display: none !important; }
         }
       `}</style>
       <div
