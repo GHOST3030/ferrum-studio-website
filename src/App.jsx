@@ -36,28 +36,31 @@ const T = {
   accent: "var(--fs-accent)",
   accentSoft: "var(--fs-accent-soft)",
   border: "var(--fs-border)",
+  radius: "var(--fs-radius)",
 };
 
 /* ---------- THEME + LANGUAGE ---------- */
 
 const THEME_VARS = `
-  :root[data-fs-theme="dark"] {
-    --fs-bg: #0C0B09;
-    --fs-surface: #17150F;
-    --fs-text: #F4F0E6;
-    --fs-text-sec: #9C9484;
-    --fs-accent: #D6A756;
-    --fs-accent-soft: rgba(214,167,86,0.14);
-    --fs-border: #2A271F;
-  }
   :root[data-fs-theme="light"] {
-    --fs-bg: #FAF7F0;
-    --fs-surface: #F0EBDD;
-    --fs-text: #16140F;
-    --fs-text-sec: #6E6656;
-    --fs-accent: #9C7222;
-    --fs-accent-soft: rgba(156,114,34,0.12);
-    --fs-border: #DFD8C4;
+    --fs-bg: #F6F1E9;
+    --fs-surface: #ECE3D3;
+    --fs-text: #241A1D;
+    --fs-text-sec: #7A6E62;
+    --fs-accent: #7A2039;
+    --fs-accent-soft: rgba(122,32,57,0.10);
+    --fs-border: #DFD3BE;
+    --fs-radius: 22px;
+  }
+  :root[data-fs-theme="dark"] {
+    --fs-bg: #1B1216;
+    --fs-surface: #261A1F;
+    --fs-text: #F4ECE2;
+    --fs-text-sec: #A99789;
+    --fs-accent: #E0A0AE;
+    --fs-accent-soft: rgba(224,160,174,0.14);
+    --fs-border: #382730;
+    --fs-radius: 22px;
   }
 `;
 
@@ -270,6 +273,7 @@ function Placeholder({ label, ratio = "56%", tone = 1, fill = false }) {
         position: "relative",
         background: "var(--fs-surface)",
         overflow: "hidden",
+        borderRadius: T.radius,
       }}
     >
       <svg
@@ -353,7 +357,7 @@ function Button({ children, variant = "primary", onClick, style = {} }) {
     border: `1px solid ${variant === "cta" ? T.accent : T.text}`,
     background: "transparent",
     color: T.text,
-    borderRadius: 2,
+    borderRadius: 12,
     transition: "all 400ms cubic-bezier(0.16,1,0.3,1)",
     fontFamily: "inherit",
   };
@@ -631,7 +635,8 @@ function ProjectBlock({ project, span, onOpen, toneIdx }) {
         style={{
           overflow: "hidden",
           position: "relative",
-          boxShadow: hover ? "0 24px 48px -24px rgba(0,0,0,0.5)" : "0 0 0 rgba(0,0,0,0)",
+          borderRadius: T.radius,
+          boxShadow: hover ? "0 24px 48px -24px rgba(0,0,0,0.35)" : "0 0 0 rgba(0,0,0,0)",
           transition: "box-shadow 500ms ease",
         }}
       >
@@ -739,7 +744,7 @@ function Home({ go, openProject }) {
           </Reveal>
         </div>
         <Reveal delay={100} style={{ height: "100%" }}>
-          <div style={{ height: "100%", minHeight: 420 }}>
+          <div style={{ height: "100%", minHeight: 420, padding: "24px 0", paddingInlineEnd: "5vw" }} className="ferrum-hero-image-pad">
             <div style={{ height: "100%", position: "relative" }}>
               <div style={{ position: "absolute", inset: 0 }}>
                 <Placeholder label="Ferrum Studio hero" fill tone={0} />
@@ -1114,12 +1119,12 @@ function Contact() {
 
   const fieldStyle = {
     width: "100%",
-    background: "transparent",
-    border: "none",
-    borderBottom: `1px solid ${T.border}`,
+    background: T.surface,
+    border: `1px solid ${T.border}`,
+    borderRadius: 12,
     color: T.text,
     fontSize: 16,
-    padding: "12px 0",
+    padding: "14px 16px",
     outline: "none",
     fontFamily: "inherit",
   };
@@ -1226,9 +1231,9 @@ export default function App() {
     if (typeof window !== "undefined") {
       const saved = window.localStorage?.getItem("fs-theme");
       if (saved) return saved;
-      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) return "light";
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
     }
-    return "dark";
+    return "light";
   });
   const [lang, setLang] = useState(() => {
     if (typeof window !== "undefined") {
