@@ -356,7 +356,7 @@ function unsplashUrl(id, w = 1600) {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 }
 
-function Placeholder({ label, caption, ratio = "56%", tone = 1, fill = false, radius }) {
+function Placeholder({ label, caption, ratio = "56%", tone = 1, fill = false, radius, shadow = true }) {
   const [imgFailed, setImgFailed] = useState(false);
   const seed = hashSeed(label || "ferrum");
   const hue1 = seed % 360;
@@ -380,7 +380,9 @@ function Placeholder({ label, caption, ratio = "56%", tone = 1, fill = false, ra
         background: "var(--fs-surface)",
         overflow: "hidden",
         borderRadius: radius !== undefined ? radius : T.radius,
+        boxShadow: shadow ? "0 26px 50px -22px rgba(20,14,12,0.45)" : "none",
       }}
+      className="ferrum-elevated-img"
     >
       <svg
         viewBox="0 0 100 100"
@@ -742,14 +744,12 @@ function ProjectBlock({ project, span, onOpen, toneIdx }) {
     >
       <div
         style={{
-          overflow: "hidden",
           position: "relative",
-          borderRadius: T.radius,
-          boxShadow: hover ? "0 24px 48px -24px rgba(0,0,0,0.35)" : "0 0 0 rgba(0,0,0,0)",
-          transition: "box-shadow 500ms ease",
+          transform: hover ? "translateY(-4px)" : "translateY(0)",
+          transition: "transform 500ms cubic-bezier(0.16,1,0.3,1)",
         }}
       >
-        <div style={{ transform: hover ? "scale(1.045)" : "scale(1)", transition: "transform 650ms cubic-bezier(0.16,1,0.3,1)" }}>
+        <div style={{ transform: hover ? "scale(1.02)" : "scale(1)", transition: "transform 650ms cubic-bezier(0.16,1,0.3,1)" }}>
           <Placeholder label={pick(project.name, "en")} caption="" tone={toneIdx} ratio={span === "span 12" ? "42%" : "68%"} />
         </div>
         <div
@@ -820,10 +820,8 @@ function ProjectListRow({ project, index, onOpen }) {
         borderTop: `1px solid ${T.border}`,
       }}
     >
-      <div style={{ marginInline: "-5vw", overflow: "hidden" }}>
-        <div style={{ transform: hover ? "scale(1.02)" : "scale(1)", transition: "transform 600ms cubic-bezier(0.16,1,0.3,1)" }}>
-          <Placeholder label={pick(project.name, "en")} caption="" ratio="46%" radius={0} />
-        </div>
+      <div style={{ transform: hover ? "translateY(-4px) scale(1.01)" : "translateY(0) scale(1)", transition: "transform 500ms cubic-bezier(0.16,1,0.3,1)" }}>
+        <Placeholder label={pick(project.name, "en")} caption="" ratio="46%" />
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 20, gap: 16, flexWrap: "wrap" }}>
         <div style={{ fontSize: "clamp(22px, 3vw, 34px)", color: hover ? T.accent : T.text, transition: "color 300ms ease" }}>{name}</div>
